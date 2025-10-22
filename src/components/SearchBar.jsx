@@ -14,7 +14,7 @@ const SearchBar = () => {
                 ref={inputRef}
                 type="text" 
                 placeholder='Search Contacts' 
-                className='w-full ml-2 md:text-xl rounded-full bg-[#333439] px-2 text-white placeholder-gray-400 outline-none'
+                className='w-full ml-2 md:text-xl rounded-full bg-[#333439] px-2 text-gray-400 placeholder-gray-400 outline-none'
             />
 </div>
 
