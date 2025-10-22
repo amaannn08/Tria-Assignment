@@ -1,8 +1,9 @@
 import {React,useState} from 'react'
 import { contacts } from '../contacts';
 import { Pencil, Square, SquareCheck, Star } from 'lucide-react';
+import { useSelected } from "./SelectedContext";
 const ShowContacts = () => {
-  const [selected, setSelected] = useState([]);
+  const { selected, setSelected } = useSelected();
     const [favourite, setFavourite] = useState(
       contacts.reduce((acc, c) => {
         acc[c.name] = c.favourite === "Yes";
@@ -38,13 +39,13 @@ const ShowContacts = () => {
       {contacts.sort((a,b)=>(a.name.charAt(0).localeCompare(b.name.charAt(0)))).map(item =>
           <div
             key={item.name}
-            className="group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] bg-[#38393e] w-full h-12 md:h-20 p-4 rounded-t-2xl rounded-b-md mb-1 md:hover:bg-blue-400 transition-all duration-700"
+            className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] bg-[#38393e] w-full h-12 md:h-20 p-4 rounded-t-2xl rounded-b-md mb-1 ${selected.includes(item.name)?"bg-blue-400":"md:hover:bg-blue-400"}  transition-all duration-700`}
           >
             <div className="flex flex-row items-center gap-4 transition-all duration-700">
               {/* Profile Circle */}
               <div className="w-10 md:w-15 h-10 md:h-15 flex items-center justify-center">
                 <div
-                  className={`w-8 md:w-10 h-8 md:h-10 rounded-full ${item.color} flex items-center justify-center text-white font-bold md:group-hover:hidden`}
+                  className={`w-8 md:w-10 h-8 md:h-10 rounded-full ${item.color} flex items-center justify-center text-white font-bold ${selected.includes(item.name)?"md:hidden":"md:group-hover:hidden "}`}
                 >
                   {item.name.charAt(0)}
                 </div>
@@ -55,7 +56,7 @@ const ShowContacts = () => {
                   onClick={() => onSelectHandler(item.name)}
                 >
                   {selected.includes(item.name) ? (
-                    <SquareCheck className="md:w-10 md:h-8 text-white font-bold hidden group-hover:block" />
+                    <SquareCheck className="md:w-10 md:h-8 text-white font-bold hidden md:block" />
                   ) : (
                     <Square className="md:w-10 md:h-8 text-white font-bold hidden group-hover:block" />
                   )}
