@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import SearchBar from './components/SearchBar'
+import CreateContact from './components/CreateContact'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      Hello World
-    </>
+    <div className='w-full bg-[#1e1f24] h-screen p-[5%] md:p-[3%]'>
+      <div className='flex flex-col items-center md:flex-row md:items-center'>
+        <SearchBar/>
+        <CreateContact/>
+      </div>
+      
+    </div>  
   )
 }
 
