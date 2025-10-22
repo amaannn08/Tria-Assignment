@@ -1,39 +1,6 @@
-import { React, useState } from 'react';
-import { contacts } from '../contacts';
-import { Pencil, Square, SquareCheck, Star } from 'lucide-react';
+import React from 'react'
 
-const FavouriteList = () => {
-  const [selected, setSelected] = useState([]);
-  const [favourite, setFavourite] = useState(
-    contacts.reduce((acc, c) => {
-      acc[c.name] = c.favourite === "Yes";
-      return acc;
-    }, {})
-  );
-
-  function favChange(name) {
-    setFavourite(prev => {
-      const newValue = !prev[name];
-      const index = contacts.findIndex(c => c.name === name);
-      if (index !== -1) {
-        contacts[index] = {
-          ...contacts[index],
-          favourite: newValue ? "Yes" : "No"
-        };
-      }
-
-      return { ...prev, [name]: newValue };
-    });
-  }
-
-  function onSelectHandler(name) {
-    if (selected.includes(name)) {
-      setSelected(prev => prev.filter(n => n !== name));
-    } else {
-      setSelected(prev => [...prev, name]);
-    }
-  }
-
+const ShowContacts = () => {
   return (
     <div className="w-full mt-3">
       {contacts.map(item =>
@@ -94,6 +61,6 @@ const FavouriteList = () => {
       )}
     </div>
   );
-};
+}
 
-export default FavouriteList;
+export default ShowContacts

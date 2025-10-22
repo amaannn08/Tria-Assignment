@@ -1,6 +1,7 @@
 import React from 'react'
 import Favourite from './Favourite'
 import { contacts } from '../contacts'
+import Contacts from './ShowContacts'
 const Maincontent = () => {
   return (
     <div>
@@ -16,6 +17,7 @@ const Maincontent = () => {
             </div>
             <hr className='hidden md:block my-2 border-t border-gray-300'/>
             <Favourite/>
+            <ShowContacts/>
         </div>
     </div>
   )
