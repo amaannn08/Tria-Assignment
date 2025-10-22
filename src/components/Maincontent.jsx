@@ -1,7 +1,7 @@
 import React from 'react'
 import Favourite from './Favourite'
 import { contacts } from '../contacts'
-import Contacts from './ShowContacts'
+import ShowContacts from './ShowContacts'
 const Maincontent = () => {
   return (
     <div>

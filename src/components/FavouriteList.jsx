@@ -36,7 +36,7 @@ const FavouriteList = () => {
 
   return (
     <div className="w-full mt-3">
-      {contacts.map(item =>
+      {contacts.sort((a,b)=>(a.name.charAt(0).localeCompare(b.name.charAt(0)))).map(item =>
         favourite[item.name] ? (
           <div
             key={item.name}
@@ -75,18 +75,18 @@ const FavouriteList = () => {
               <h1 className="text-white hidden md:block pl-3">{item.phoneNumber}</h1>
             </div>
 
-            <div className="hidden group-hover:flex md:items-center md:justify-end mr-3 gap-4">
+            <div className="hidden md:group-hover:flex md:items-center md:justify-end mr-3 gap-4">
               <div
                 onClick={() => favChange(item.name)}
-                className="h-10 w-10 md:hover:bg-gray-400 md:hover:rounded-full flex items-center justify-center cursor-pointer">
+                className="hidden md:flex h-10 w-10 md:hover:bg-gray-400 md:hover:rounded-full items-center justify-center cursor-pointer">
                 {favourite[item.name] ? (
                   <Star className="text-white fill-white" />
                 ) : (
                   <Star className="text-white" />
                 )}
               </div>
-              <div className="h-10 w-10 md:hover:bg-gray-400 md:hover:rounded-full flex items-center justify-center cursor-pointer">
-                <Pencil className="text-white" />
+              <div className="hidden md:h-10 md:w-10 md:hover:bg-gray-400 md:hover:rounded-full md:flex md:items-center md:justify-center md:cursor-pointer">
+                <Pencil className="text-white hidden md:block" />
               </div>
             </div>
           </div>
