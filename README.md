@@ -2,6 +2,8 @@
 
 A modern, responsive contact management application built with React and Vite. This application provides a comprehensive solution for managing personal contacts with features like search, favorites, bulk operations, and theme switching.
 
+[Link](https://tria-assignment-delta.vercel.app/)
+
 ## 🚀 Tech Stack
 
 - **React 19** - Modern React with hooks and context API
