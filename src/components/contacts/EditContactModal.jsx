@@ -407,3 +407,4 @@ const EditContactModal = ({ isOpen, onClose, contact }) => {
 };
 
 export default EditContactModal;
+

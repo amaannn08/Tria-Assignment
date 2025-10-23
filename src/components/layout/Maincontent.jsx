@@ -7,16 +7,13 @@ import BulkActionsBar from '../ui/BulkActionsBar'
 import SortDropdown from '../ui/SortDropdown'
 import FloatingActionButton from '../ui/FloatingActionButton'
 import DesktopThemeToggle from '../ui/DesktopThemeToggle'
-import CreateContactModal from '../contacts/CreateContactModal'
-import EditContactModal from '../contacts/EditContactModal'
+import { useCreateContact } from '../context/CreateContactContext'
 
 const Maincontent = () => {
+  const { openEditModal } = useCreateContact();
   const { contacts, setContacts } = useContacts();
   const { selected, setSelected } = useSelected();
   const [sortOption, setSortOption] = useState('name-asc');
-  const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [contactToEdit, setContactToEdit] = useState(null);
 
   const handleBulkDelete = () => {
     const updatedContacts = contacts.filter(c => !selected.includes(c.name));
@@ -46,23 +43,6 @@ const Maincontent = () => {
     setSelected([]);
   };
 
-  const handleCreateContact = () => {
-    setCreateModalOpen(true);
-  };
-
-  const handleEditContact = (contact) => {
-    setContactToEdit(contact);
-    setEditModalOpen(true);
-  };
-
-  const handleCloseCreateModal = () => {
-    setCreateModalOpen(false);
-  };
-
-  const handleCloseEditModal = () => {
-    setEditModalOpen(false);
-    setContactToEdit(null);
-  };
 
   return (
     <div>
@@ -76,7 +56,7 @@ const Maincontent = () => {
               onSortChange={setSortOption}
             />
             <Favourite/>
-            <ShowContacts sortOption={sortOption} onEditContact={handleEditContact}/>
+            <ShowContacts sortOption={sortOption} onEditContact={openEditModal}/>
         </div>
         <BulkActionsBar 
           selectedCount={selected.length}
@@ -84,17 +64,8 @@ const Maincontent = () => {
           onFavorite={handleBulkFavorite}
           onClear={handleClearSelection}
         />
-        <FloatingActionButton onCreateContact={handleCreateContact} />
+        <FloatingActionButton />
         <DesktopThemeToggle />
-        <CreateContactModal 
-          isOpen={createModalOpen} 
-          onClose={handleCloseCreateModal} 
-        />
-        <EditContactModal 
-          isOpen={editModalOpen} 
-          onClose={handleCloseEditModal} 
-          contact={contactToEdit}
-        />
     </div>
   )
 }

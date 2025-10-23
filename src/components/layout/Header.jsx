@@ -4,8 +4,10 @@ import { UserCircle2 } from 'lucide-react'
 import SearchBar from '../search/SearchBar'
 import MobileSearchBox from '../search/MobileSearchBox'
 import CreateContactButton from '../ui/CreateContactButton'
+import { useCreateContact } from '../context/CreateContactContext'
 
 const Header = () => {
+  const { openCreateModal } = useCreateContact();
   return (
     <div className='flex flex-row items-center fixed w-full top-0 left-0 md:h-20 bg-gray-100 dark:bg-gray-800 shadow-md px-4 md:px-8 py-3 md:py-0 gap-3 md:gap-4 z-50 transition-colors duration-300'>
         <Link to="/" className='flex items-center gap-2 hover:opacity-80 transition-opacity'>
@@ -17,7 +19,7 @@ const Header = () => {
           <div className='flex items-center justify-end md:hidden'><MobileSearchBox/></div>
         </div>
         <div className='flex items-center gap-3'>
-          <div className='hidden md:block'><CreateContactButton/></div>
+          <div className='hidden md:block'><CreateContactButton onCreateContact={openCreateModal}/></div>
         </div>
     </div>
   )

@@ -197,21 +197,13 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                         </div>
 
                         {/* Buttons */}
-                        <div className="w-full flex flex-row items-center justify-center gap-4 mt-6">
+                        <div className="w-full flex justify-center mt-6">
                             <button
                                 type="submit"
-                                className="w-[30%] flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
+                                className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg min-w-[120px]"
                             >
                                 <Check className="w-5 h-5" />
                                 <span className="font-medium">Save</span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleClose}
-                                className="flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg w-[30%]"
-                            >
-                                <X className="w-5 h-5" />
-                                <span className="font-medium">Cancel</span>
                             </button>
                         </div>
                     </form>
@@ -332,21 +324,13 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                             </div>
 
                             {/* Buttons at Bottom */}
-                            <div className="flex gap-4 mt-4 pt-2 border-t border-gray-300 dark:border-gray-600">
+                            <div className="flex justify-center mt-4 pt-2 border-t border-gray-300 dark:border-gray-600">
                                 <button
                                     type="submit"
-                                    className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-8 py-3.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium text-base"
+                                    className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-8 py-3.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium text-base min-w-[140px]"
                                 >
                                     <Check className="w-5 h-5" />
                                     <span>Save Contact</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleClose}
-                                    className="flex-1 flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 py-3.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium text-base"
-                                >
-                                    <X className="w-5 h-5" />
-                                    <span>Cancel</span>
                                 </button>
                             </div>
                         </form>
@@ -358,3 +342,4 @@ const CreateContactModal = ({ isOpen, onClose }) => {
 };
 
 export default CreateContactModal;
+
