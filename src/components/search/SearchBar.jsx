@@ -1,6 +1,6 @@
 import { UserSearch,X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useContacts } from "./ContactsContext";
+import { useContacts } from "../context/ContactsContext";
 import SearchedContacts from './SearchedContacts';
 const SearchBar = () => {
     const { contacts, setContacts } = useContacts();
@@ -45,8 +45,8 @@ const SearchBar = () => {
         <div className='w-full relative'>
             <div 
             onClick={focusHandler}
-            className={`flex items-center w-full border border-gray-300 h-10 md:h-12 px-2 rounded-xl pl-3 transition-all duration-500 ${selected?"bg-white":"bg-gray-200 "}`}>
-                <UserSearch className=' text-gray-600 md:w-6 md:h-6' />
+            className={`flex items-center w-full border h-10 md:h-12 px-2 rounded-xl pl-3 transition-all duration-300 ${selected ? "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600" : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"}`}>
+                <UserSearch className='text-gray-600 dark:text-gray-300 md:w-6 md:h-6' />
                 <input 
                 value={searchTerm}
                 onChange={handleSearch}
@@ -54,10 +54,10 @@ const SearchBar = () => {
                 ref={inputRef}
                 type="text" 
                 placeholder='Search Contacts' 
-                className={`w-[100%] ml-2 md:text-xl rounded-full px-2 text-gray-900 placeholder-gray-500 outline-none transition-all duration-500 ${selected?"bg-white":"bg-gray-200 "}`}
+                className={`w-[100%] ml-2 md:text-xl rounded-full px-2 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 outline-none transition-all duration-300 ${selected ? "bg-white dark:bg-gray-700" : "bg-gray-200 dark:bg-gray-700"}`}
                 />
-                <div onClick={clearSearch} className='flex justify-items-center hover:bg-gray-300 rounded-full p-1 cursor-pointer'>
-                    <X className='text-gray-600 md:w-8 md:h-8'/>
+                <div onClick={clearSearch} className='flex justify-items-center hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full p-1 cursor-pointer transition-colors'>
+                    <X className='text-gray-600 dark:text-gray-300 md:w-8 md:h-8'/>
                 </div>
             </div>
             <SearchedContacts searchContacts={searchContacts.slice(0,5)}/>

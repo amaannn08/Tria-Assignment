@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { contacts as defaultContacts } from "../contacts"; // your contacts
+import { contacts as defaultContacts } from "../../contacts"; // your contacts
 
 const ContactsContext = createContext();
 

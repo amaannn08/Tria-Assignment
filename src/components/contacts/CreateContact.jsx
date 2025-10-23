@@ -1,6 +1,6 @@
 import { User, Mail, Phone, Check, X } from "lucide-react"
 import { useState } from "react"
-import { useContacts } from "./ContactsContext"
+import { useContacts } from "../context/ContactsContext"
 import { useNavigate } from "react-router-dom"
 
 const CreateContact = () => {
@@ -97,7 +97,7 @@ const CreateContact = () => {
                 {/* Name Section */}
                 <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-6">
                     <div className="flex justify-center md:justify-start items-start pt-2">
-                        <User className="text-gray-500 w-6 h-6 md:w-8 md:h-8"/>
+                        <User className="text-gray-500 dark:text-gray-400 w-6 h-6 md:w-8 md:h-8"/>
                     </div>
                     <div className="flex-1 flex flex-col gap-4">
                         <div>
@@ -105,22 +105,22 @@ const CreateContact = () => {
                                 name="firstName"
                                 value={formData.firstName}
                                 onChange={handleChange}
-                                className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 px-4 border-2 transition-colors ${errors.firstName ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
+                                className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.firstName ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                 type="text" 
                                 placeholder="First Name"
                             />
-                            {errors.firstName && <p className="text-red-500 text-sm mt-1 ml-1">{errors.firstName}</p>}
+                            {errors.firstName && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.firstName}</p>}
                         </div>
                         <div>
                             <input 
                                 name="lastName"
                                 value={formData.lastName}
                                 onChange={handleChange}
-                                className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 px-4 border-2 transition-colors ${errors.lastName ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
+                                className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.lastName ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                 type="text" 
                                 placeholder="Last Name"
                             />
-                            {errors.lastName && <p className="text-red-500 text-sm mt-1 ml-1">{errors.lastName}</p>}
+                            {errors.lastName && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.lastName}</p>}
                         </div>
                     </div>
                 </div>
@@ -128,36 +128,36 @@ const CreateContact = () => {
                 {/* Email Section */}
                 <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-6">
                     <div className="flex justify-center md:justify-start items-start pt-2">
-                        <Mail className="text-gray-500 w-6 h-6 md:w-8 md:h-8"/>
+                        <Mail className="text-gray-500 dark:text-gray-400 w-6 h-6 md:w-8 md:h-8"/>
                     </div>
                     <div className="flex-1">
                         <input 
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 px-4 border-2 transition-colors ${errors.email ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
+                            className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             type="email" 
                             placeholder="Email"
                         />
-                        {errors.email && <p className="text-red-500 text-sm mt-1 ml-1">{errors.email}</p>}
+                        {errors.email && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.email}</p>}
                     </div>
                 </div>
 
                 {/* Phone Section */}
                 <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-8">
                     <div className="flex justify-center md:justify-start items-start pt-2">
-                        <Phone className="text-gray-500 w-6 h-6 md:w-8 md:h-8"/>
+                        <Phone className="text-gray-500 dark:text-gray-400 w-6 h-6 md:w-8 md:h-8"/>
                     </div>
                     <div className="flex-1">
                         <input 
                             name="phoneNumber"
                             value={formData.phoneNumber}
                             onChange={handleChange}
-                            className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 px-4 border-2 transition-colors ${errors.phoneNumber ? 'border-red-500' : 'border-gray-400 focus:border-blue-500'}`}
+                            className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.phoneNumber ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             type="tel" 
                             placeholder="Phone Number"
                         />
-                        {errors.phoneNumber && <p className="text-red-500 text-sm mt-1 ml-1">{errors.phoneNumber}</p>}
+                        {errors.phoneNumber && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.phoneNumber}</p>}
                     </div>
                 </div>
 
@@ -165,7 +165,7 @@ const CreateContact = () => {
                 <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start mt-10 mb-8">
                     <button
                         type="submit"
-                        className="flex flex-row items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg w-full md:w-auto"
+                        className="flex flex-row items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg w-full md:w-auto"
                     >
                         <Check className="w-5 h-5" />
                         <span className="font-medium">Save</span>
@@ -173,7 +173,7 @@ const CreateContact = () => {
                     <button
                         type="button"
                         onClick={handleCancel}
-                        className="flex flex-row items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg w-full md:w-auto"
+                        className="flex flex-row items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg w-full md:w-auto"
                     >
                         <X className="w-5 h-5" />
                         <span className="font-medium">Cancel</span>
