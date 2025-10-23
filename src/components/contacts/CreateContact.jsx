@@ -94,14 +94,14 @@ const CreateContact = () => {
         <div className="w-full md:mt-20 px-4 md:px-8 py-6">
             {/* Profile Circle - Centered */}
             <div className="flex justify-center md:justify-start mb-8 relative">
-                <div className={`w-24 h-24 md:w-40 md:h-40 rounded-full flex ${profileColor} items-center justify-center shadow-lg`}>
+                <div className={`w-32 h-32 md:w-40 md:h-40 rounded-full flex ${profileColor} items-center justify-center shadow-lg`}>
                     <h1 className="text-5xl md:text-9xl text-white font-bold">{displayLetter}</h1>
                 </div>
                 {/* Favorite Toggle */}
                 <button
                     type="button"
                     onClick={() => setIsFavorite(prev => !prev)}
-                    className={`absolute bottom-0 right-1/2 translate-x-1/2 md:translate-x-0 md:right-auto md:left-32 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    className={`absolute bottom-0 right-1/2 translate-x-1/2 md:translate-x-0 md:right-auto top-36 md:left-32 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                         isFavorite 
                             ? 'bg-yellow-500 hover:bg-yellow-600 shadow-md' 
                             : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
@@ -114,7 +114,7 @@ const CreateContact = () => {
             
             <form onSubmit={handleSubmit} className="max-w-3xl mx-auto md:mx-0">
                 {/* Name Section */}
-                <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-6">
+                <div className="flex flex-row gap-4 mt-20 md:gap-6 mb-6">
                     <div className="flex justify-center md:justify-start items-start pt-2">
                         <User className="text-gray-500 dark:text-gray-400 w-6 h-6 md:w-8 md:h-8"/>
                     </div>
@@ -145,7 +145,7 @@ const CreateContact = () => {
                 </div>
 
                 {/* Email Section */}
-                <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-6">
+                <div className="flex flex-row gap-4 md:gap-6 mb-6">
                     <div className="flex justify-center md:justify-start items-start pt-2">
                         <Mail className="text-gray-500 dark:text-gray-400 w-6 h-6 md:w-8 md:h-8"/>
                     </div>
@@ -163,7 +163,7 @@ const CreateContact = () => {
                 </div>
 
                 {/* Phone Section */}
-                <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-8">
+                <div className="flex flex-row gap-4 md:gap-6 mb-8">
                     <div className="flex justify-center md:justify-start items-start pt-2">
                         <Phone className="text-gray-500 dark:text-gray-400 w-6 h-6 md:w-8 md:h-8"/>
                     </div>
@@ -181,7 +181,7 @@ const CreateContact = () => {
                 </div>
 
                 {/* Action Buttons - Centered */}
-                <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start mt-10 mb-8">
+                <div className="flex flex-row gap-4 justify-center md:justify-start mt-10 mb-8">
                     <button
                         type="submit"
                         className="flex flex-row items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg w-full md:w-auto"
