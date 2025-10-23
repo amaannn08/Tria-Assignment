@@ -4,18 +4,18 @@ import { useContacts } from "./ContactsContext";
 import ShowContacts from './ShowContacts'
 
 const Maincontent = () => {
+  const { contacts, setContacts } = useContacts();
   return (
     <div>
         <div>
-            <Element/>
+            <Element contacts={contacts}/>
             <Favourite/>
             <ShowContacts/>
         </div>
     </div>
   )
 }
-function Element (){
-  const { contacts, setContacts } = useContacts();
+function Element ({ contacts }){
   return (
     <>
       <div className='mt-16 hidden md:flex flex-row items-center gap-2'>

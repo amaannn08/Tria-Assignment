@@ -1,30 +1,21 @@
-import { React, useState } from 'react';
+import React from 'react';
 import { useContacts } from "./ContactsContext";
 import { Pencil, Square, SquareCheck, Star } from 'lucide-react';
 import { useSelected } from "./SelectedContext";
 const FavouriteList = () => {
   const { contacts, setContacts } = useContacts();
   const { selected, setSelected } = useSelected();
-  const [favourite, setFavourite] = useState(
-    contacts.reduce((acc, c) => {
-      acc[c.name] = c.favourite === "Yes";
-      return acc;
-    }, {})
-  );
 
   function favChange(name) {
-    setFavourite(prev => {
-      const newValue = !prev[name];
-      const index = contacts.findIndex(c => c.name === name);
-      if (index !== -1) {
-        contacts[index] = {
-          ...contacts[index],
-          favourite: newValue ? "Yes" : "No"
-        };
-      }
-
-      return { ...prev, [name]: newValue };
-    });
+    const index = contacts.findIndex(c => c.name === name);
+    if (index !== -1) {
+      const updatedContacts = [...contacts];
+      updatedContacts[index] = {
+        ...updatedContacts[index],
+        favourite: updatedContacts[index].favourite === "Yes" ? "No" : "Yes"
+      };
+      setContacts(updatedContacts);
+    }
   }
 
   function onSelectHandler(name) {
@@ -38,7 +29,7 @@ const FavouriteList = () => {
   return (
     <div className="w-full mt-3">
       {contacts.sort((a,b)=>(a.name.charAt(0).localeCompare(b.name.charAt(0)))).map(item =>
-        favourite[item.name] ? (
+        item.favourite === "Yes" ? (
           <div
             key={item.name}
             className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] bg-gray-50 border border-gray-200 w-full h-12 md:h-20 p-4 rounded-t-2xl rounded-b-md mb-1 ${selected.includes(item.name)?"bg-blue-100 border-blue-300":"md:hover:bg-blue-50 md:hover:border-blue-200"} transition-all duration-700`}
@@ -80,7 +71,7 @@ const FavouriteList = () => {
               <div
                 onClick={() => favChange(item.name)}
                 className="hidden md:flex h-10 w-10 md:hover:bg-gray-200 md:hover:rounded-full items-center justify-center cursor-pointer">
-                {favourite[item.name] ? (
+                {item.favourite === "Yes" ? (
                   <Star className="text-gray-700 fill-gray-700" />
                 ) : (
                   <Star className="text-gray-700" />

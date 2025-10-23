@@ -12,7 +12,7 @@ const SearchBar = () => {
     
     useEffect(() => {
         setAllContacts(contacts);
-    }, []);
+    }, [contacts]);
     
     const focusHandler=()=>{
         inputRef.current.focus();

@@ -1,30 +1,21 @@
-import {React,useState} from 'react'
+import React from 'react'
 import { useContacts } from "./ContactsContext";
 import { Pencil, Square, SquareCheck, Star } from 'lucide-react';
 import { useSelected } from "./SelectedContext";
 const ShowContacts = () => {
   const { contacts, setContacts } = useContacts();
   const { selected, setSelected } = useSelected();
-    const [favourite, setFavourite] = useState(
-      contacts.reduce((acc, c) => {
-        acc[c.name] = c.favourite === "Yes";
-        return acc;
-      }, {})
-    );
   
     function favChange(name) {
-      setFavourite(prev => {
-        const newValue = !prev[name];
-        const index = contacts.findIndex(c => c.name === name);
-        if (index !== -1) {
-          contacts[index] = {
-            ...contacts[index],
-            favourite: newValue ? "Yes" : "No"
-          };
-        }
-  
-        return { ...prev, [name]: newValue };
-      });
+      const index = contacts.findIndex(c => c.name === name);
+      if (index !== -1) {
+        const updatedContacts = [...contacts];
+        updatedContacts[index] = {
+          ...updatedContacts[index],
+          favourite: updatedContacts[index].favourite === "Yes" ? "No" : "Yes"
+        };
+        setContacts(updatedContacts);
+      }
     }
   
     function onSelectHandler(name) {
@@ -79,7 +70,7 @@ const ShowContacts = () => {
               <div
                 onClick={() => favChange(item.name)}
                 className="hidden md:flex h-10 w-10 md:hover:bg-gray-200 md:hover:rounded-full items-center justify-center cursor-pointer">
-                  {favourite[item.name] ? (
+                  {item.favourite === "Yes" ? (
                   <Star className="text-gray-700 fill-gray-700" />
                   ) : (
                   <Star className="text-gray-700" />
