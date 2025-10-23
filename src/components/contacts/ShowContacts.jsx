@@ -7,7 +7,7 @@ import DeleteConfirmModal from '../ui/DeleteConfirmModal';
 import EmptyState from '../ui/EmptyState';
 import ContactDetailsModal from './ContactDetailsModal';
 
-const ShowContacts = ({ sortOption = 'name-asc' }) => {
+const ShowContacts = ({ sortOption = 'name-asc', onEditContact }) => {
   const { contacts, setContacts } = useContacts();
   const { selected, setSelected } = useSelected();
   const navigate = useNavigate();
@@ -128,7 +128,7 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
                 onContactClick={handleContactClick}
                 onSelectHandler={onSelectHandler}
                 onFavChange={favChange}
-                onEditClick={() => navigate(`/edit/${encodeURIComponent(item.name)}`)}
+                onEditClick={() => onEditContact(item)}
                 onDeleteClick={handleDeleteClick}
               />
             ))}
@@ -143,7 +143,7 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
             onContactClick={handleContactClick}
             onSelectHandler={onSelectHandler}
             onFavChange={favChange}
-            onEditClick={() => navigate(`/edit/${encodeURIComponent(item.name)}`)}
+            onEditClick={() => onEditContact(item)}
             onDeleteClick={handleDeleteClick}
           />
         ))
@@ -160,6 +160,7 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
         onClose={handleDetailsClose}
         onDelete={handleDetailsDelete}
         onToggleFavorite={handleDetailsToggleFavorite}
+        onEdit={onEditContact}
       />
     </div>
   );

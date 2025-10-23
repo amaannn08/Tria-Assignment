@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, Mail, Phone, Star, Pencil, Trash2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useContacts } from '../context/ContactsContext';
 
-const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavorite }) => {
-    const navigate = useNavigate();
+const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavorite, onEdit }) => {
     const { contacts } = useContacts();
     const [currentContact, setCurrentContact] = useState(contact);
 
@@ -19,7 +17,7 @@ const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavor
     if (!isOpen || !currentContact) return null;
 
     const handleEdit = () => {
-        navigate(`/edit/${encodeURIComponent(currentContact.name)}`);
+        onEdit(currentContact);
         onClose();
     };
 
@@ -44,10 +42,27 @@ const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavor
             
             {/* Modal */}
             <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md animate-fadeIn transition-colors duration-300">
-                {/* Close Button */}
+                {/* Action Buttons - Top Left */}
+                <div className="absolute top-4 left-4 flex gap-2 z-10">
+                    <button
+                        onClick={handleEdit}
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-full p-2 transition-colors"
+                        title="Edit contact"
+                    >
+                        <Pencil className="w-6 h-6" />
+                    </button>
+                    <button
+                        onClick={handleDelete}
+                        className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full p-2 transition-colors"
+                        title="Delete contact"
+                    >
+                        <Trash2 className="w-6 h-6" />
+                    </button>
+                </div>
+                {/* Close Button - Top Right */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors z-10"
+                    className="absolute top-4 right-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full p-2 transition-colors z-10"
                 >
                     <X className="w-6 h-6" />
                 </button>
@@ -112,24 +127,6 @@ const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavor
                             </a>
                         </div>
                     </div>
-                </div>
-
-                {/* Actions */}
-                <div className="p-6 pt-0 flex gap-3">
-                    <button
-                        onClick={handleEdit}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors font-medium"
-                    >
-                        <Pencil className="w-5 h-5" />
-                        <span>Edit</span>
-                    </button>
-                    <button
-                        onClick={handleDelete}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors font-medium"
-                    >
-                        <Trash2 className="w-5 h-5" />
-                        <span>Delete</span>
-                    </button>
                 </div>
             </div>
         </div>
