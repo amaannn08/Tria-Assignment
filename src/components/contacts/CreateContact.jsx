@@ -1,4 +1,4 @@
-import { User, Mail, Phone, Check, X } from "lucide-react"
+import { User, Mail, Phone, Check, X, Star } from "lucide-react"
 import { useState } from "react"
 import { useContacts } from "../context/ContactsContext"
 import { useNavigate } from "react-router-dom"
@@ -14,7 +14,15 @@ const CreateContact = () => {
         phoneNumber: ''
     });
 
+    const [isFavorite, setIsFavorite] = useState(false);
     const [errors, setErrors] = useState({});
+    
+    // Generate color once when component mounts
+    const [profileColor] = useState(() => {
+        const colors = ["bg-red-700", "bg-green-700", "bg-blue-700", "bg-yellow-700", "bg-purple-600"];
+        return colors[Math.floor(Math.random() * colors.length)];
+    });
+
     const getRandomColor = () => {
         const colors = ["bg-red-700", "bg-green-700", "bg-blue-700", "bg-yellow-700", "bg-purple-600"];
         return colors[Math.floor(Math.random() * colors.length)];
@@ -42,9 +50,8 @@ const CreateContact = () => {
             newErrors.lastName = 'Last name is required';
         }
         
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        // Email is optional, but validate format if provided
+        if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             newErrors.email = 'Invalid email format';
         }
         
@@ -69,8 +76,8 @@ const CreateContact = () => {
             name: `${formData.firstName} ${formData.lastName}`,
             email: formData.email,
             phoneNumber: formData.phoneNumber,
-            favourite: "No",
-            color: getRandomColor()
+            favourite: isFavorite ? "Yes" : "No",
+            color: profileColor
         };
 
         setContacts([...contacts, newContact]);
@@ -82,15 +89,27 @@ const CreateContact = () => {
     };
 
     const displayLetter = formData.firstName ? formData.firstName.charAt(0).toUpperCase() : '?';
-    const profileColor = formData.firstName ? getRandomColor() : 'bg-gray-400';
     
     return (
         <div className="w-full md:mt-20 px-4 md:px-8 py-6">
             {/* Profile Circle - Centered */}
-            <div className="flex justify-center md:justify-start mb-8">
+            <div className="flex justify-center md:justify-start mb-8 relative">
                 <div className={`w-24 h-24 md:w-40 md:h-40 rounded-full flex ${profileColor} items-center justify-center shadow-lg`}>
                     <h1 className="text-5xl md:text-9xl text-white font-bold">{displayLetter}</h1>
                 </div>
+                {/* Favorite Toggle */}
+                <button
+                    type="button"
+                    onClick={() => setIsFavorite(prev => !prev)}
+                    className={`absolute bottom-0 right-1/2 translate-x-1/2 md:translate-x-0 md:right-auto md:left-32 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        isFavorite 
+                            ? 'bg-yellow-500 hover:bg-yellow-600 shadow-md' 
+                            : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                    }`}
+                    title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                >
+                    <Star className={`w-5 h-5 transition-all ${isFavorite ? 'text-white fill-white' : 'text-gray-600 dark:text-gray-300'}`} />
+                </button>
             </div>
             
             <form onSubmit={handleSubmit} className="max-w-3xl mx-auto md:mx-0">
@@ -137,7 +156,7 @@ const CreateContact = () => {
                             onChange={handleChange}
                             className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             type="email" 
-                            placeholder="Email"
+                            placeholder="Email (Optional)"
                         />
                         {errors.email && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.email}</p>}
                     </div>

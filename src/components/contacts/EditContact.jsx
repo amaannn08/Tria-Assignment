@@ -1,4 +1,4 @@
-import { User, Mail, Phone, Check, X } from "lucide-react"
+import { User, Mail, Phone, Check, X, Star } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useContacts } from "../context/ContactsContext"
 import { useNavigate, useParams } from "react-router-dom"
@@ -18,6 +18,7 @@ const EditContact = () => {
     const [errors, setErrors] = useState({});
     const [contactNotFound, setContactNotFound] = useState(false);
     const [originalContact, setOriginalContact] = useState(null);
+    const [isFavorite, setIsFavorite] = useState(false);
 
     useEffect(() => {
         // Find the contact to edit
@@ -30,6 +31,7 @@ const EditContact = () => {
                 email: contact.email || '',
                 phoneNumber: contact.phoneNumber || ''
             });
+            setIsFavorite(contact.favourite === "Yes");
             setOriginalContact(contact);
         } else {
             setContactNotFound(true);
@@ -63,9 +65,8 @@ const EditContact = () => {
             newErrors.lastName = 'Last name is required';
         }
         
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        // Email is optional, but validate format if provided
+        if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             newErrors.email = 'Invalid email format';
         }
         
@@ -96,6 +97,7 @@ const EditContact = () => {
                 name: newName,
                 email: formData.email,
                 phoneNumber: formData.phoneNumber,
+                favourite: isFavorite ? "Yes" : "No",
                 color: originalContact.color || getRandomColor()
             };
             setContacts(updatedContacts);
@@ -128,10 +130,23 @@ const EditContact = () => {
     return (
         <div className="w-full md:mt-20 px-4 md:px-8 py-6">
             {/* Profile Circle - Centered */}
-            <div className="flex justify-center md:justify-start mb-8">
+            <div className="flex justify-center md:justify-start mb-8 relative">
                 <div className={`w-24 h-24 md:w-40 md:h-40 rounded-full flex ${profileColor} items-center justify-center shadow-lg`}>
                     <h1 className="text-5xl md:text-9xl text-white font-bold">{displayLetter}</h1>
                 </div>
+                {/* Favorite Toggle */}
+                <button
+                    type="button"
+                    onClick={() => setIsFavorite(prev => !prev)}
+                    className={`absolute bottom-0 right-1/2 translate-x-1/2 md:translate-x-0 md:right-auto md:left-32 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        isFavorite 
+                            ? 'bg-yellow-500 hover:bg-yellow-600 shadow-md' 
+                            : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                    }`}
+                    title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                >
+                    <Star className={`w-5 h-5 transition-all ${isFavorite ? 'text-white fill-white' : 'text-gray-600 dark:text-gray-300'}`} />
+                </button>
             </div>
             
             <form onSubmit={handleSubmit} className="max-w-3xl mx-auto md:mx-0">
@@ -178,7 +193,7 @@ const EditContact = () => {
                             onChange={handleChange}
                             className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             type="email" 
-                            placeholder="Email"
+                            placeholder="Email (Optional)"
                         />
                         {errors.email && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.email}</p>}
                     </div>
