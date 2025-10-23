@@ -67,7 +67,6 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
       favChange(name);
     }
 
-    // Sort contacts based on sortOption
     const getSortedContacts = () => {
       const contactsCopy = [...contacts];
       
@@ -91,10 +90,9 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
 
     const sortedContacts = getSortedContacts();
 
-    // Group contacts by first letter for alphabetical sorting
     const groupContactsByLetter = () => {
       if (sortOption !== 'name-asc' && sortOption !== 'name-desc') {
-        return null; // Only show grouping for alphabetical sorting
+        return null; 
       }
 
       const grouped = {};
@@ -115,7 +113,6 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
       {contacts.length === 0 ? (
         <EmptyState type="contacts" />
       ) : groupedContacts ? (
-        // Render with alphabetical grouping
         Object.keys(groupedContacts).sort().map(letter => (
           <div key={letter}>
             {/* Letter Header */}
@@ -138,7 +135,6 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
           </div>
         ))
       ) : (
-        // Render without grouping
         sortedContacts.map(item => (
           <ContactRow 
             key={item.name}
@@ -169,12 +165,11 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
   );
 }
 
-// Extracted ContactRow component for reusability
 const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChange, onEditClick, onDeleteClick }) => {
   return (
     <div
       onClick={() => onContactClick(item)}
-      className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] ${selected.includes(item.name) ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700" : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-gray-600"} w-full h-12 md:h-20 p-4 rounded-t-2xl rounded-b-md mb-1 transition-all duration-300 cursor-pointer active:scale-[0.99]`}
+      className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] md:items-center ${selected.includes(item.name) ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700" : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-gray-600"} w-full h-12 md:h-14 px-4 rounded-t-2xl rounded-b-md mb-1 transition-all duration-300 cursor-pointer active:scale-[0.99]`}
     >
       <div className="flex flex-row items-center gap-4 transition-all duration-700">
         {/* Profile Circle */}
@@ -219,11 +214,11 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
             e.stopPropagation();
             onFavChange(item.name);
           }}
-                className="hidden md:flex h-10 w-10 md:hover:bg-gray-200 dark:md:hover:bg-gray-600 md:hover:rounded-full items-center justify-center cursor-pointer">
+                className="hidden md:flex h-10 w-10 md:hover:bg-yellow-200 dark:md:hover:bg-yellow-800 md:hover:rounded-full items-center justify-center cursor-pointer">
                   {item.favourite === "Yes" ? (
-                  <Star className="text-gray-700 dark:text-gray-300 fill-gray-700 dark:fill-gray-300" />
+                  <Star className="text-yellow-400 dark:text-yellow-400 fill-yellow-400 dark:fill-yellow-400" />
                   ) : (
-                  <Star className="text-gray-700 dark:text-gray-300" />
+                  <Star className="text-yellow-700 dark:text-yellow-300" />
                   )}
               </div>
               <div 
@@ -231,8 +226,8 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
                   e.stopPropagation();
                   onEditClick();
                 }}
-                className="hidden md:h-10 md:w-10 md:hover:bg-gray-200 dark:md:hover:bg-gray-600 md:hover:rounded-full md:flex md:items-center md:justify-center md:cursor-pointer">
-                <Pencil className="text-gray-700 dark:text-gray-300 hidden md:block" />
+                className="hidden md:h-10 md:w-10 md:hover:bg-blue-200 dark:md:hover:bg-blue-600 md:hover:rounded-full md:flex md:items-center md:justify-center md:cursor-pointer">
+                <Pencil className="text-blue-700 dark:text-blue-300 hidden md:block" />
               </div>
               <div 
                 onClick={(e) => {
