@@ -119,7 +119,7 @@ const ShowContacts = ({ sortOption = 'name-asc' }) => {
         Object.keys(groupedContacts).sort().map(letter => (
           <div key={letter}>
             {/* Letter Header */}
-            <div className="sticky top-28 md:top-20 bg-white dark:bg-gray-900 z-10 py-1.5 border-b border-gray-300 dark:border-gray-700 mb-1 transition-colors duration-300">
+            <div className="sticky top-16 md:top-20 bg-white dark:bg-gray-900 z-10 py-1.5 border-b border-gray-300 dark:border-gray-700 mb-1 transition-colors duration-300">
               <h2 className="text-base md:text-xl font-bold text-blue-600 dark:text-blue-400 px-2">{letter}</h2>
             </div>
             {/* Contacts under this letter */}
