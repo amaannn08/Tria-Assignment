@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Maincontent from './components/Maincontent'
-
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from './components/HomePage';
 
 function App() {
   return (
-    <div className='w-full bg-white min-h-screen'>
-      <Header/>
-      <div className='pt-32 p-1 md:p-5'>
-        <Maincontent/>
-      </div>
-    </div>  
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<HomePage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
