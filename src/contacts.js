@@ -1,3 +1,4 @@
+localStorage.clear();
 export const contacts = [
   {"name": "Aman Gupta", "email": "aman.gupta@email.com", "phoneNumber": "9876543210", "favourite": "Yes", "color": "bg-yellow-700"},
   {"name": "Riya Sharma", "email": "riya.sharma@email.com", "phoneNumber": "9876541230", "favourite": "No", "color": "bg-blue-700"},

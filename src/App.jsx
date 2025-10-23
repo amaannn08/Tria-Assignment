@@ -1,17 +1,15 @@
-import { useState } from 'react'
-import SearchBar from './components/SearchBar'
-import CreateContact from './components/CreateContact'
+import { useEffect, useState } from 'react'
+import Header from './components/Header'
 import Maincontent from './components/Maincontent'
 
-function App() {
 
+function App() {
   return (
-    <div className='w-full bg-[#1e1f24] min-h-screen p-[5%] md:p-[3%]'>
-      <div className='flex flex-col items-center md:flex-row md:items-center'>
-        <SearchBar/>
-        <CreateContact/>
+    <div className='w-full bg-white min-h-screen'>
+      <Header/>
+      <div className='pt-24 p-1 md:p-5'>
+        <Maincontent/>
       </div>
-      <Maincontent/>
     </div>  
   )
 }
