@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter>
       <div className='w-full bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300'>
         <Header/>
-        <div className='pt-28 md:pt-24 p-1 md:p-5'>
+        <div className='pt-20 md:pt-24 p-1 md:p-5'>
           <Routes>
             <Route path='/' element={<Maincontent/>} />
             <Route path='/create' element={<CreateContact/>} />

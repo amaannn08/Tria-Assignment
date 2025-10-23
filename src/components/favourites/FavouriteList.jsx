@@ -115,8 +115,6 @@ const FavouriteList = () => {
             <div>
               <h1 className="text-gray-900 dark:text-gray-100 hidden md:block pl-3">{item.phoneNumber}</h1>
             </div>
-
-            {/* Desktop: Show actions on hover */}
             <div className="hidden md:group-hover:flex md:items-center md:justify-end mr-3 gap-4">
               <div
                 onClick={(e) => {

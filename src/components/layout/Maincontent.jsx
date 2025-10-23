@@ -69,8 +69,7 @@ function Element ({ contacts, selected, onSelectAll, onDeselectAll, sortOption, 
   
   return (
     <>
-      {/* Mobile Header */}
-      <div className='mt-2 flex md:hidden flex-row items-center justify-between gap-2 px-2'>
+      <div className='mt-0 flex md:hidden flex-row items-center justify-between gap-2 px-2'>
         <div className='flex items-center gap-2'>
           <h1 className='text-gray-800 dark:text-gray-100 font-sans text-xl font-semibold'>Contacts</h1>
           <h1 className='text-gray-600 dark:text-gray-400 font-sans text-sm'>({contacts.length})</h1>
@@ -79,9 +78,7 @@ function Element ({ contacts, selected, onSelectAll, onDeselectAll, sortOption, 
           <SortDropdown sortOption={sortOption} onSortChange={onSortChange} />
         )}
       </div>
-
-      {/* Desktop Header */}
-      <div className='mt-6 hidden md:flex flex-row items-center gap-4'>
+      <div className=' hidden md:flex flex-row items-center gap-4'>
         <h1 className='text-gray-800 dark:text-gray-100 font-sans text-3xl font-semibold'>Contacts </h1>
         <h1 className='text-gray-700 dark:text-gray-400 font-sans text-xl font-semibold'>({contacts.length})</h1>
         <div className='flex items-center gap-3 ml-auto'>
