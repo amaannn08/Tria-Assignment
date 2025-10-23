@@ -92,7 +92,7 @@ const SearchBar = () => {
         <div className='w-full relative'>
             <div 
             onClick={focusHandler}
-            className={`flex items-center w-full border h-10 md:h-12 px-2 rounded-xl pl-3 transition-all duration-300 ${selected ? "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600" : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"}`}>
+            className={`flex items-center w-[60%] border h-10 md:h-12 px-2 rounded-xl pl-3 transition-all duration-300 ${selected ? "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600" : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"}`}>
                 <UserSearch className='text-gray-600 dark:text-gray-300 md:w-6 md:h-6' />
                 <input 
                 value={searchTerm}
