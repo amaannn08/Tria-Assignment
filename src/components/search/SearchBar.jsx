@@ -2,6 +2,8 @@ import { UserSearch,X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useContacts } from "../context/ContactsContext";
 import SearchedContacts from './SearchedContacts';
+import ContactDetailsModal from '../contacts/ContactDetailsModal';
+import DeleteConfirmModal from '../ui/DeleteConfirmModal';
 const SearchBar = () => {
     const { contacts, setContacts } = useContacts();
     const [searchContacts,setSearchContacts]=useState([]);
@@ -9,6 +11,8 @@ const SearchBar = () => {
     const [allContacts, setAllContacts] = useState([]);
     const [selected,setSelected]=useState(false);
     const inputRef=useRef(null);
+    const [detailsModal, setDetailsModal] = useState({ isOpen: false, contact: null });
+    const [deleteModal, setDeleteModal] = useState({ isOpen: false, contactName: null });
     
     useEffect(() => {
         setAllContacts(contacts);
@@ -19,9 +23,12 @@ const SearchBar = () => {
         setSelected(true);
     };
     const blurHanlder=()=>{
-        setSelected(false);
-        setSearchTerm("");
-        setSearchContacts([]);
+        // Delay clearing to allow click events to register
+        setTimeout(() => {
+            setSelected(false);
+            setSearchTerm("");
+            setSearchContacts([]);
+        }, 200);
     }
     const handleSearch = (e) => {
         const value = e.target.value.toLowerCase();
@@ -41,6 +48,46 @@ const SearchBar = () => {
         setSearchTerm("");
         setSearchContacts([]);
     }
+
+    const handleContactClick = (contact) => {
+        setDetailsModal({ isOpen: true, contact });
+        setSearchTerm("");
+        setSearchContacts([]);
+        setSelected(false);
+    };
+
+    const handleDetailsClose = () => {
+        setDetailsModal({ isOpen: false, contact: null });
+    };
+
+    const handleDetailsDelete = (name) => {
+        setDeleteModal({ isOpen: true, contactName: name });
+        setDetailsModal({ isOpen: false, contact: null });
+    };
+
+    const handleDeleteConfirm = () => {
+        if (deleteModal.contactName) {
+            const updatedContacts = contacts.filter(c => c.name !== deleteModal.contactName);
+            setContacts(updatedContacts);
+        }
+        setDeleteModal({ isOpen: false, contactName: null });
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteModal({ isOpen: false, contactName: null });
+    };
+
+    const handleToggleFavorite = (name) => {
+        const index = contacts.findIndex(c => c.name === name);
+        if (index !== -1) {
+            const updatedContacts = [...contacts];
+            updatedContacts[index] = {
+                ...updatedContacts[index],
+                favourite: updatedContacts[index].favourite === "Yes" ? "No" : "Yes"
+            };
+            setContacts(updatedContacts);
+        }
+    };
     return (
         <div className='w-full relative'>
             <div 
@@ -60,7 +107,23 @@ const SearchBar = () => {
                     <X className='text-gray-600 dark:text-gray-300 md:w-8 md:h-8'/>
                 </div>
             </div>
-            <SearchedContacts searchContacts={searchContacts.slice(0,5)}/>
+            <SearchedContacts 
+                searchContacts={searchContacts.slice(0,5)} 
+                onContactClick={handleContactClick}
+            />
+            <ContactDetailsModal
+                isOpen={detailsModal.isOpen}
+                contact={detailsModal.contact}
+                onClose={handleDetailsClose}
+                onDelete={handleDetailsDelete}
+                onToggleFavorite={handleToggleFavorite}
+            />
+            <DeleteConfirmModal
+                isOpen={deleteModal.isOpen}
+                contactName={deleteModal.contactName}
+                onConfirm={handleDeleteConfirm}
+                onClose={handleDeleteCancel}
+            />
         </div>
     )
 }
