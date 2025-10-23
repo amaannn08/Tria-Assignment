@@ -1,27 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Mail, Phone, Star, Pencil, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useContacts } from '../context/ContactsContext';
 
 const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavorite }) => {
     const navigate = useNavigate();
+    const { contacts } = useContacts();
+    const [currentContact, setCurrentContact] = useState(contact);
 
-    if (!isOpen || !contact) return null;
+    // Update currentContact when contacts change or modal opens
+    useEffect(() => {
+        if (isOpen && contact) {
+            const updated = contacts.find(c => c.name === contact.name);
+            setCurrentContact(updated || contact);
+        }
+    }, [isOpen, contact, contacts]);
+
+    if (!isOpen || !currentContact) return null;
 
     const handleEdit = () => {
-        navigate(`/edit/${encodeURIComponent(contact.name)}`);
+        navigate(`/edit/${encodeURIComponent(currentContact.name)}`);
         onClose();
     };
 
     const handleDelete = () => {
-        onDelete(contact.name);
+        onDelete(currentContact.name);
         onClose();
     };
 
     const handleToggleFavorite = () => {
-        onToggleFavorite(contact.name);
+        onToggleFavorite(currentContact.name);
     };
 
-    const isFavorite = contact.favourite === "Yes";
+    const isFavorite = currentContact.favourite === "Yes";
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -44,13 +55,13 @@ const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavor
                 {/* Header with Profile Circle */}
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-8 rounded-t-lg transition-colors duration-300">
                     <div className="flex flex-col items-center">
-                        <div className={`w-24 h-24 rounded-full ${contact.color} flex items-center justify-center shadow-lg mb-4`}>
+                        <div className={`w-24 h-24 rounded-full ${currentContact.color} flex items-center justify-center shadow-lg mb-4`}>
                             <h1 className="text-5xl text-white font-bold">
-                                {contact.name.charAt(0).toUpperCase()}
+                                {currentContact.name.charAt(0).toUpperCase()}
                             </h1>
                         </div>
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center mb-2">
-                            {contact.name}
+                            {currentContact.name}
                         </h2>
                         <button
                             onClick={handleToggleFavorite}
@@ -78,10 +89,10 @@ const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavor
                         <div className="flex-1 min-w-0">
                             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Email</p>
                             <a 
-                                href={`mailto:${contact.email}`}
+                                href={`mailto:${currentContact.email}`}
                                 className="text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-all"
                             >
-                                {contact.email}
+                                {currentContact.email}
                             </a>
                         </div>
                     </div>
@@ -94,10 +105,10 @@ const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavor
                         <div className="flex-1 min-w-0">
                             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Phone</p>
                             <a 
-                                href={`tel:${contact.phoneNumber}`}
+                                href={`tel:${currentContact.phoneNumber}`}
                                 className="text-gray-900 dark:text-gray-100 hover:text-green-600 dark:hover:text-green-400 transition-colors"
                             >
-                                {contact.phoneNumber}
+                                {currentContact.phoneNumber}
                             </a>
                         </div>
                     </div>
