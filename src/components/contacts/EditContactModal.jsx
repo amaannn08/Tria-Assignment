@@ -254,14 +254,6 @@ const EditContactModal = ({ isOpen, onClose, contact }) => {
                                 <Check className="w-5 h-5" />
                                 <span className="font-medium">Save</span>
                             </button>
-                            <button
-                                type="button"
-                                onClick={handleClose}
-                                className="flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 py-3 rounded-md transition-all duration-300 shadow-md hover:shadow-lg w-[30%]"
-                            >
-                                <X className="w-5 h-5" />
-                                <span className="font-medium">Cancel</span>
-                            </button>
                         </div>
                     </form>
                 </div>
