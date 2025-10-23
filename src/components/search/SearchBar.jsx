@@ -54,7 +54,7 @@ const SearchBar = () => {
                 ref={inputRef}
                 type="text" 
                 placeholder='Search Contacts' 
-                className={`w-[100%] ml-2 md:text-xl rounded-full px-2 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 outline-none transition-all duration-300 ${selected ? "bg-white dark:bg-gray-700" : "bg-gray-200 dark:bg-gray-700"}`}
+                className={`w-[100%] ml-2 md:text-xl rounded-full text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 outline-none transition-all duration-300 ${selected ? "bg-white dark:bg-gray-700" : "bg-gray-200 dark:bg-gray-700"}`}
                 />
                 <div onClick={clearSearch} className='flex justify-items-center hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full p-1 cursor-pointer transition-colors'>
                     <X className='text-gray-600 dark:text-gray-300 md:w-8 md:h-8'/>
