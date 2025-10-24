@@ -251,7 +251,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                             <input 
                                                 value={email}
                                                 onChange={(e) => handleEmailChange(index, e.target.value)}
-                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-700 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-800 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                                 type="email" 
                                                 placeholder={index === 0 ? "Email (Optional)" : "Additional Email"}
                                             />
@@ -289,7 +289,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                             <input 
                                                 value={phone}
                                                 onChange={(e) => handlePhoneChange(index, e.target.value)}
-                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-700 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-800 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                                 type="tel" 
                                                 placeholder={index === 0 ? "Phone Number" : "Additional Phone"}
                                             />

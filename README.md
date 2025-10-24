@@ -4,6 +4,16 @@ A modern, responsive contact management application built with React and Vite. T
 
 ## [Deployed on Vercell](https://tria-assignment-delta.vercel.app/)
 
+## 🆕 Recent Updates
+
+### Version 2.0 - Enhanced Contact Management
+- **Multiple Contact Details**: Added support for multiple email addresses and phone numbers per contact
+- **Duplicate Detection & Merging**: Automatic detection of duplicate contacts with intelligent merging options
+- **Enhanced Mobile Experience**: Improved mobile selection with long-press functionality and clean hover-free interface
+- **Smart Bulk Operations**: Intelligent favorite toggling based on current selection state
+- **Improved UI/UX**: Better visual feedback, responsive modals, and enhanced form handling
+- **Data Migration**: Automatic migration of existing contacts to support new multiple detail structure
+
 ## 🚀 Tech Stack
 
 - **React 19** - Modern React with hooks and context API
@@ -16,12 +26,15 @@ A modern, responsive contact management application built with React and Vite. T
 ## ✨ Features
 
 ### 📱 Contact Management
-- **Create Contacts**: Add new contacts with first name, last name, email (optional), and 10-digit phone number
-- **Edit Contacts**: Modify existing contact information through intuitive modal popups
+- **Create Contacts**: Add new contacts with first name, last name, multiple emails, and multiple phone numbers
+- **Edit Contacts**: Modify existing contact information through intuitive modal popups with support for multiple emails/phones
 - **Delete Contacts**: Remove contacts with confirmation modal for safety
 - **View Details**: Click any contact to view detailed information in a modal
 - **Profile Colors**: Automatic random color assignment for visual contact identification
 - **Form Validation**: Real-time validation with helpful error messages
+- **Multiple Contact Details**: Support for multiple email addresses and phone numbers per contact
+- **Duplicate Detection**: Automatic detection of duplicate contacts by name or phone number
+- **Contact Merging**: Merge duplicate contacts with option to choose primary contact and combine details
 
 ### 🔍 Search Functionality
 - **Desktop Search**: Full search bar in the header for quick access
@@ -38,10 +51,13 @@ A modern, responsive contact management application built with React and Vite. T
 
 ### 📋 Bulk Operations
 - **Multi-select**: Select multiple contacts using checkboxes
+- **Mobile Long-press**: Long-press on mobile to select contacts
+- **Desktop Hover Selection**: Hover to show checkbox, click to select on desktop
 - **Bulk Delete**: Delete multiple contacts simultaneously
-- **Bulk Favorites**: Toggle favorite status for selected contacts
-- **Select All/Deselect All**: Quick selection controls
+- **Bulk Favorites**: Toggle favorite status for selected contacts (smart toggle based on selection state)
+- **Select All/Deselect All**: Quick selection controls available on mobile and desktop
 - **Floating Action Bar**: Shows selected count and available actions
+- **Dynamic Positioning**: Floating buttons adjust position when bulk actions bar is visible
 
 ### 🔄 Sorting Options
 - **Name Sorting**: Sort contacts alphabetically (A-Z or Z-A)
@@ -54,6 +70,7 @@ A modern, responsive contact management application built with React and Vite. T
 - **Mobile Theme Toggle**: Theme toggle positioned below floating action button
 - **Smooth Transitions**: Elegant theme switching animations
 - **Persistent Preferences**: Theme choice saved across sessions
+- **Consistent Color Scheme**: Unified dark theme with proper contrast and readability
 
 ### 💾 Data Persistence
 - **LocalStorage Integration**: All contacts automatically saved to browser storage
@@ -66,6 +83,9 @@ A modern, responsive contact management application built with React and Vite. T
 - **Touch-friendly UI**: Large touch targets and intuitive mobile interactions
 - **Floating Action Button**: Easy contact creation on mobile
 - **Adaptive Search**: Different search interfaces for different screen sizes
+- **Mobile Selection**: Long-press to select contacts on mobile devices
+- **Desktop Hover**: Hover interactions for desktop users
+- **No Mobile Hover**: Clean mobile experience without unwanted hover effects
 
 ### 🎯 UI/UX Features
 - **Modal Workflows**: Create and edit contacts through elegant modal popups
@@ -74,6 +94,10 @@ A modern, responsive contact management application built with React and Vite. T
 - **Confirmation Modals**: Safety confirmations for destructive actions
 - **Form Validation**: Real-time validation with clear error messages
 - **Smooth Animations**: Polished transitions and micro-interactions
+- **Live Preview**: Real-time preview of contact details while creating/editing
+- **Smart Form Handling**: Dynamic add/remove fields for multiple emails and phone numbers
+- **Intuitive Selection**: Clear visual feedback for selected contacts
+- **Responsive Modals**: Full-screen modals on mobile, centered on desktop
 
 ## 🛠️ Installation & Setup
 
@@ -114,6 +138,7 @@ src/
 │   │   ├── CreateContactModal.jsx
 │   │   ├── EditContact.jsx
 │   │   ├── EditContactModal.jsx
+│   │   ├── MergeContactsModal.jsx
 │   │   └── ShowContacts.jsx
 │   ├── context/           # React Context providers
 │   │   ├── ContactsContext.jsx
@@ -158,9 +183,11 @@ src/
 ### Creating a Contact
 1. Click the "+" button (mobile) or "Add Contact" button (desktop)
 2. Fill in the required fields (first name, last name, phone number)
-3. Optionally add an email address
-4. Toggle favorite status if desired
-5. Click "Save" to create the contact
+3. Optionally add multiple email addresses using the "+ Add Email" button
+4. Optionally add multiple phone numbers using the "+ Add Phone" button
+5. Toggle favorite status if desired
+6. If duplicate contacts are detected, choose to merge or create separately
+7. Click "Save" to create the contact
 
 ### Searching Contacts
 - **Desktop**: Use the search bar in the header
@@ -173,20 +200,24 @@ src/
 - Use bulk operations to manage multiple favorites at once
 
 ### Bulk Operations
-1. Select contacts using the checkboxes
-2. Use the floating action bar to perform bulk actions
-3. Choose to delete or toggle favorite status for selected contacts
+1. **Desktop**: Hover over contacts to show checkboxes, then click to select
+2. **Mobile**: Long-press on contacts to select them
+3. Use "Select All" button to select all contacts at once
+4. Use the floating action bar to perform bulk actions
+5. Choose to delete or toggle favorite status for selected contacts
+6. The favorite button intelligently adds all to favorites or removes all from favorites based on current selection
 
 ## 🔮 Future Enhancements
 
 - **Import/Export**: CSV import/export functionality
 - **Contact Categories**: Organize contacts by categories or tags
 - **Photo Upload**: Add profile pictures for contacts
-- **Duplicate Detection**: Automatic detection and merging of duplicate contacts
 - **Backup & Sync**: Cloud backup and synchronization
 - **Advanced Search**: Filter by multiple criteria
 - **Contact Groups**: Create and manage contact groups
 - **Notes & Reminders**: Add notes and set reminders for contacts
+- **Contact Sharing**: Share contacts via QR codes or links
+- **Advanced Merge Options**: More sophisticated duplicate detection algorithms
 
 ## 📄 License
 

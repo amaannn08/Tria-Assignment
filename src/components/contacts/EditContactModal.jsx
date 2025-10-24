@@ -383,7 +383,7 @@ const EditContactModal = ({ isOpen, onClose, contact }) => {
                                 className={`absolute bottom-2 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg ${
                                     isFavorite 
                                         ? 'bg-yellow-500 hover:bg-yellow-600' 
-                                        : 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600'
+                                        : 'bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-600'
                                 }`}
                             >
                                 <Star className={`w-7 h-7 transition-all ${isFavorite ? 'text-white fill-white' : 'text-gray-500 dark:text-gray-400'}`} />
@@ -564,7 +564,7 @@ const EditContactModal = ({ isOpen, onClose, contact }) => {
                                 <button
                                     type="button"
                                     onClick={handleClose}
-                                    className="flex-1 flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 py-3.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium text-base"
+                                    className="flex-1 flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 dark:bg-gray-800 dark:hover:bg-gray-600 text-white px-8 py-3.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium text-base"
                                 >
                                     <X className="w-5 h-5" />
                                     <span>Cancel</span>
