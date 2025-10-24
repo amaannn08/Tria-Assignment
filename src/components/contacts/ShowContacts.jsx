@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useContacts } from "../context/ContactsContext";
 import { Pencil, Square, SquareCheck, Star, Trash2 } from 'lucide-react';
 import { useSelected } from "../context/SelectedContext";
@@ -7,9 +7,8 @@ import DeleteConfirmModal from '../ui/DeleteConfirmModal';
 import EmptyState from '../ui/EmptyState';
 import ContactDetailsModal from './ContactDetailsModal';
 
-const ShowContacts = ({ sortOption = 'name-asc', onEditContact }) => {
+const ShowContacts = ({ sortOption = 'name-asc', onEditContact, selected = [], onSelectHandler }) => {
   const { contacts, setContacts } = useContacts();
-  const { selected, setSelected } = useSelected();
   const navigate = useNavigate();
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, contactName: null });
   const [detailsModal, setDetailsModal] = useState({ isOpen: false, contact: null });
@@ -26,13 +25,6 @@ const ShowContacts = ({ sortOption = 'name-asc', onEditContact }) => {
       }
     }
   
-    function onSelectHandler(name) {
-      if (selected.includes(name)) {
-        setSelected(prev => prev.filter(n => n !== name));
-      } else {
-        setSelected(prev => [...prev, name]);
-      }
-    }
 
     function handleDeleteClick(name) {
       setDeleteModal({ isOpen: true, contactName: name });
@@ -167,32 +159,121 @@ const ShowContacts = ({ sortOption = 'name-asc', onEditContact }) => {
 }
 
 const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChange, onEditClick, onDeleteClick }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchUsed, setTouchUsed] = useState(false);
+  const [showCheckbox, setShowCheckbox] = useState(false);
+  const longPressTimer = useRef(null);
+
+  // Check if mobile on mount
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      if (longPressTimer.current) {
+        clearTimeout(longPressTimer.current);
+      }
+    };
+  }, []);
+
+  const handleTouchStart = (e) => {
+    if (isMobile) {
+      setTouchUsed(true);
+      // If any contacts are already selected, use single tap
+      if (selected.length > 0) {
+        onSelectHandler(item.name);
+        return;
+      }
+      
+      // Otherwise, use long press for first selection
+      longPressTimer.current = setTimeout(() => {
+        onSelectHandler(item.name);
+      }, 500); // 500ms long press
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+    setTimeout(() => {
+      // Reset touchUsed after a delay to allow click events to work
+      setTimeout(() => setTouchUsed(false), 100);
+    }, 100);
+  };
+
+  const handleTouchMove = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  const handleClick = (e) => {
+    // Prevent click if touch was used (to avoid double firing)
+    if (touchUsed) {
+      e.stopPropagation();
+      return;
+    }
+
+    // If any contacts are selected, clicking should select this contact
+    if (selected.length > 0) {
+      e.stopPropagation();
+      onSelectHandler(item.name);
+    } else {
+      // Otherwise, open contact details
+      onContactClick(item);
+    }
+  };
+
   return (
     <div
-      onClick={() => onContactClick(item)}
+      onClick={handleClick}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchMove={handleTouchMove}
+      onMouseEnter={() => setShowCheckbox(true)}
+      onMouseLeave={() => {
+        if (!selected.includes(item.name)) {
+          setShowCheckbox(false);
+        }
+      }}
       className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] md:items-center ${selected.includes(item.name) ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700" : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-gray-600"} w-full h-12 md:h-14 px-4 rounded-t-2xl rounded-b-md mb-1 transition-all duration-300 cursor-pointer active:scale-[0.99]`}
     >
       <div className="flex flex-row items-center gap-4 transition-all duration-700">
-        {/* Profile Circle */}
-        <div className="w-10 md:w-15 h-10 md:h-15 flex items-center justify-center">
+        {/* Profile Circle and Checkbox - Same space */}
+        <div className="w-10 md:w-15 h-10 md:h-15 flex items-center justify-center relative">
+          {/* Profile Icon - Always present, hidden on hover/selected */}
           <div
-            className={`w-8 md:w-10 h-8 md:h-10 rounded-full ${item.color} flex items-center justify-center text-white font-bold ${selected.includes(item.name)?"md:hidden":"md:group-hover:hidden "}`}
+            className={`w-8 md:w-10 h-8 md:h-10 rounded-full ${item.color} flex items-center justify-center text-white font-bold transition-opacity duration-200 ${
+              selected.includes(item.name) || showCheckbox ? 'opacity-0' : 'opacity-100'
+            }`}
           >
             {item.name.charAt(0)}
           </div>
-
-          {/* Checkbox */}
+          
+          {/* Checkbox - Hidden by default, visible on hover/selected */}
           <div
-            className="hidden md:flex md:items-center"
+            className={`absolute flex items-center justify-center transition-opacity duration-200 z-10 ${
+              selected.includes(item.name) || showCheckbox
+                ? 'opacity-100' 
+                : 'opacity-0'
+            }`}
             onClick={(e) => {
               e.stopPropagation();
               onSelectHandler(item.name);
+              // Reset hover state after clicking
+              setShowCheckbox(false);
             }}
           >
             {selected.includes(item.name) ? (
-              <SquareCheck className="md:w-10 md:h-8 text-gray-700 font-bold hidden md:block" />
+              <SquareCheck className="w-6 h-6 md:w-10 md:h-8 text-blue-600 dark:text-blue-400 font-bold" />
             ) : (
-              <Square className="md:w-10 md:h-8 text-gray-700 font-bold hidden group-hover:block" />
+              <Square className="w-6 h-6 md:w-10 md:h-8 text-gray-400 font-bold bg-white dark:bg-gray-700 rounded" />
             )}
           </div>
         </div>

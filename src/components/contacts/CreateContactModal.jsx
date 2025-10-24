@@ -251,7 +251,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                             <input 
                                                 value={email}
                                                 onChange={(e) => handleEmailChange(index, e.target.value)}
-                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-700 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                                 type="email" 
                                                 placeholder={index === 0 ? "Email (Optional)" : "Additional Email"}
                                             />
@@ -289,7 +289,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                             <input 
                                                 value={phone}
                                                 onChange={(e) => handlePhoneChange(index, e.target.value)}
-                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-700 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                                 type="tel" 
                                                 placeholder={index === 0 ? "Phone Number" : "Additional Phone"}
                                             />
@@ -360,16 +360,42 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Phone Number</p>
-                                <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                                    {formData.phoneNumber || '-'}
-                                </p>
+                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Phone Numbers</p>
+                                <div className="space-y-1">
+                                    {(formData.phoneNumbers && formData.phoneNumbers.length > 0 && formData.phoneNumbers[0]) ? (
+                                        formData.phoneNumbers.slice(0, 2).map((phone, index) => (
+                                            <p key={index} className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                                {phone}
+                                            </p>
+                                        ))
+                                    ) : (
+                                        <p className="text-lg font-semibold text-gray-500 dark:text-gray-400">-</p>
+                                    )}
+                                    {formData.phoneNumbers && formData.phoneNumbers.length > 2 && (
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                            +{formData.phoneNumbers.length - 2} more
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Email</p>
-                                <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 break-all">
-                                    {formData.email || '-'}
-                                </p>
+                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Emails</p>
+                                <div className="space-y-1">
+                                    {(formData.emails && formData.emails.length > 0 && formData.emails[0]) ? (
+                                        formData.emails.slice(0, 2).map((email, index) => (
+                                            <p key={index} className="text-lg font-semibold text-gray-900 dark:text-gray-100 break-all">
+                                                {email}
+                                            </p>
+                                        ))
+                                    ) : (
+                                        <p className="text-lg font-semibold text-gray-500 dark:text-gray-400">-</p>
+                                    )}
+                                    {formData.emails && formData.emails.length > 2 && (
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                            +{formData.emails.length - 2} more
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -423,7 +449,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                                 <input 
                                                     value={email}
                                                     onChange={(e) => handleEmailChange(index, e.target.value)}
-                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-700 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                                     type="email" 
                                                     placeholder={index === 0 ? "Enter email (optional)" : "Additional email"}
                                                 />
@@ -459,7 +485,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                                 <input 
                                                     value={phone}
                                                     onChange={(e) => handlePhoneChange(index, e.target.value)}
-                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-700 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                                     type="tel" 
                                                     placeholder={index === 0 ? "Enter 10-digit phone number" : "Additional phone"}
                                                 />

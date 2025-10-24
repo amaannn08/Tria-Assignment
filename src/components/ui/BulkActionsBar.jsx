@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { Trash2, Star, X } from 'lucide-react';
 import DeleteConfirmModal from './DeleteConfirmModal';
 
-const BulkActionsBar = ({ selectedCount, onDelete, onFavorite, onClear }) => {
+const BulkActionsBar = ({ selectedCount, selectedContacts = [], onDelete, onFavorite, onClear }) => {
     const [deleteModal, setDeleteModal] = useState(false);
 
     if (selectedCount === 0) return null;
+
+    // Determine if all selected contacts are favorites
+    const allAreFavorites = selectedContacts.length > 0 && selectedContacts.every(contact => contact.favourite === "Yes");
+    const favoriteButtonText = allAreFavorites ? "Remove from Favorites" : "Add to Favorites";
 
     const handleDeleteClick = () => {
         setDeleteModal(true);
@@ -44,10 +48,10 @@ const BulkActionsBar = ({ selectedCount, onDelete, onFavorite, onClear }) => {
                             <button
                                 onClick={onFavorite}
                                 className="flex items-center gap-2 px-4 py-2 bg-blue-700 dark:bg-blue-800 hover:bg-blue-800 dark:hover:bg-blue-900 rounded-md transition-colors"
-                                title="Toggle favorites"
+                                title={favoriteButtonText}
                             >
-                                <Star className="w-5 h-5" />
-                                <span className="hidden md:inline">Favorite</span>
+                                <Star className={`w-5 h-5 ${allAreFavorites ? 'text-yellow-400 fill-yellow-400' : 'text-white'}`} />
+                                <span className="hidden md:inline">{allAreFavorites ? 'Remove from Favorites' : 'Add to Favorites'}</span>
                             </button>
                             <button
                                 onClick={handleDeleteClick}

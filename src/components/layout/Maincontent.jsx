@@ -22,9 +22,18 @@ const Maincontent = () => {
   };
 
   const handleBulkFavorite = () => {
+    // Check if all selected contacts are favorites
+    const selectedContacts = contacts.filter(c => selected.includes(c.name));
+    const allAreFavorites = selectedContacts.every(c => c.favourite === "Yes");
+    
+    // If all are favorites, remove all from favorites
+    // If any are not favorites, add all to favorites
     const updatedContacts = contacts.map(c => {
       if (selected.includes(c.name)) {
-        return { ...c, favourite: c.favourite === "Yes" ? "No" : "Yes" };
+        return { 
+          ...c, 
+          favourite: allAreFavorites ? "No" : "Yes" 
+        };
       }
       return c;
     });
@@ -56,15 +65,27 @@ const Maincontent = () => {
               onSortChange={setSortOption}
             />
             <Favourite/>
-            <ShowContacts sortOption={sortOption} onEditContact={openEditModal}/>
+            <ShowContacts 
+              sortOption={sortOption} 
+              onEditContact={openEditModal}
+              selected={selected}
+              onSelectHandler={(name) => {
+                if (selected.includes(name)) {
+                  setSelected(selected.filter(n => n !== name));
+                } else {
+                  setSelected([...selected, name]);
+                }
+              }}
+            />
         </div>
         <BulkActionsBar 
           selectedCount={selected.length}
+          selectedContacts={contacts.filter(c => selected.includes(c.name))}
           onDelete={handleBulkDelete}
           onFavorite={handleBulkFavorite}
           onClear={handleClearSelection}
         />
-        <FloatingActionButton />
+        <FloatingActionButton selectedCount={selected.length} />
         <DesktopThemeToggle />
     </div>
   )
@@ -79,9 +100,19 @@ function Element ({ contacts, selected, onSelectAll, onDeselectAll, sortOption, 
           <h1 className='text-gray-800 dark:text-gray-100 font-sans text-xl font-semibold'>Contacts</h1>
           <h1 className='text-gray-600 dark:text-gray-400 font-sans text-sm'>({contacts.length})</h1>
         </div>
-        {contacts.length > 0 && (
-          <SortDropdown sortOption={sortOption} onSortChange={onSortChange} />
-        )}
+        <div className='flex items-center gap-2'>
+          {contacts.length > 0 && (
+            <>
+              <button
+                onClick={allSelected ? onDeselectAll : onSelectAll}
+                className='text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium text-sm underline'
+              >
+                {allSelected ? 'Deselect All' : 'Select All'}
+              </button>
+              <SortDropdown sortOption={sortOption} onSortChange={onSortChange} />
+            </>
+          )}
+        </div>
       </div>
       <div className=' hidden md:flex flex-row items-center gap-4'>
         <h1 className='text-gray-800 dark:text-gray-100 font-sans text-3xl font-semibold'>Contacts </h1>
