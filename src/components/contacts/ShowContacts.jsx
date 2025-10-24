@@ -44,10 +44,12 @@ const ShowContacts = ({ sortOption = 'name-asc', onEditContact, selected = [], o
     }
 
     function handleContactClick(contact) {
+      console.log('Opening modal for contact:', contact.name);
       setDetailsModal({ isOpen: true, contact });
     }
 
     function handleDetailsClose() {
+      console.log('Closing modal for contact:', detailsModal.contact?.name);
       setDetailsModal({ isOpen: false, contact: null });
     }
 
@@ -108,11 +110,11 @@ const ShowContacts = ({ sortOption = 'name-asc', onEditContact, selected = [], o
         Object.keys(groupedContacts).sort().map(letter => (
           <div key={letter}>
             {/* Letter Header */}
-            <div className="sticky top-16 md:top-20 bg-white dark:bg-gray-900 z-10 py-1.5 border-b border-gray-300 dark:border-gray-700 mb-1 transition-colors duration-300">
+            <div className="sticky top-16 md:top-20 bg-white dark:bg-gray-900 z-20 py-1.5 border-b border-gray-300 dark:border-gray-700 mb-1 transition-colors duration-300">
               <h2 className="text-base md:text-xl font-bold text-blue-600 dark:text-blue-400 px-2">{letter}</h2>
             </div>
             {/* Contacts under this letter */}
-            {groupedContacts[letter].map(item => (
+            {groupedContacts[letter].map((item, index) => (
               <ContactRow 
                 key={item.name}
                 item={item}
@@ -122,6 +124,7 @@ const ShowContacts = ({ sortOption = 'name-asc', onEditContact, selected = [], o
                 onFavChange={favChange}
                 onEditClick={() => onEditContact(item)}
                 onDeleteClick={handleDeleteClick}
+                isFirstInGroup={index === 0}
               />
             ))}
           </div>
@@ -158,7 +161,7 @@ const ShowContacts = ({ sortOption = 'name-asc', onEditContact, selected = [], o
   );
 }
 
-const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChange, onEditClick, onDeleteClick }) => {
+const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChange, onEditClick, onDeleteClick, isFirstInGroup = false }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [touchUsed, setTouchUsed] = useState(false);
   const [showCheckbox, setShowCheckbox] = useState(false);
@@ -181,6 +184,9 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
 
   const handleTouchStart = (e) => {
     if (isMobile) {
+      if (isFirstInGroup) {
+        console.log('First contact touch start:', item.name);
+      }
       setTouchUsed(true);
       // If any contacts are already selected, use single tap
       if (selected.length > 0) {
@@ -190,20 +196,45 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
       
       // Otherwise, use long press for first selection
       longPressTimer.current = setTimeout(() => {
+        if (isFirstInGroup) {
+          console.log('First contact long press triggered:', item.name);
+        }
         onSelectHandler(item.name);
       }, 500); // 500ms long press
     }
   };
 
+  // const handleTouchEnd = (e) => {
+  //   if (longPressTimer.current) {
+  //     clearTimeout(longPressTimer.current);
+  //     longPressTimer.current = null;
+  //   }
+  //   setTimeout(() => {
+  //     // Reset touchUsed after a delay to allow click events to work
+  //     setTimeout(() => setTouchUsed(false), 100);
+  //   }, 100);
+  // };
   const handleTouchEnd = (e) => {
+    if (isFirstInGroup) {
+      console.log('First contact touch end:', item.name, 'timer exists:', !!longPressTimer.current, 'selected.length:', selected.length);
+    }
+    
+    // If user lifted finger before 500ms, it's a quick tap — open modal
     if (longPressTimer.current) {
       clearTimeout(longPressTimer.current);
       longPressTimer.current = null;
+  
+      // Only open modal if no contacts are selected
+      if (selected.length === 0) {
+        if (isFirstInGroup) {
+          console.log('First contact: opening modal via quick tap');
+        }
+        onContactClick(item);
+      }
     }
-    setTimeout(() => {
-      // Reset touchUsed after a delay to allow click events to work
-      setTimeout(() => setTouchUsed(false), 100);
-    }, 100);
+  
+    // Reset touchUsed after short delay
+    setTimeout(() => setTouchUsed(false), 100);
   };
 
   const handleTouchMove = () => {
@@ -213,22 +244,34 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
     }
   };
 
-  const handleClick = (e) => {
-    // Prevent click if touch was used (to avoid double firing)
-    if (touchUsed) {
-      e.stopPropagation();
-      return;
-    }
+  // const handleClick = (e) => {
+  //   // Prevent click if touch was used (to avoid double firing)
+  //   if (touchUsed) {
+  //     e.stopPropagation();
+  //     return;
+  //   }
 
-    // If any contacts are selected, clicking should select this contact
+  //   // If any contacts are selected, clicking should select this contact
+  //   if (selected.length > 0) {
+  //     e.stopPropagation();
+  //     onSelectHandler(item.name);
+  //   } else {
+  //     // Otherwise, open contact details
+  //     onContactClick(item);
+  //   }
+  // };
+  const handleClick = (e) => {
+    // Skip clicks on mobile, since touch already handles it
+    if (isMobile) return;
+  
     if (selected.length > 0) {
       e.stopPropagation();
       onSelectHandler(item.name);
     } else {
-      // Otherwise, open contact details
       onContactClick(item);
     }
   };
+  
 
   return (
     <div
@@ -246,7 +289,7 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
           setShowCheckbox(false);
         }
       }}
-      className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] md:items-center ${selected.includes(item.name) ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700" : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 md:hover:bg-blue-50 dark:md:hover:bg-gray-700 md:hover:border-blue-200 dark:md:hover:border-gray-600"} w-full h-12 md:h-14 px-4 rounded-t-2xl rounded-b-md mb-1 transition-all duration-300 cursor-pointer active:scale-[0.99]`}
+      className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] md:items-center ${selected.includes(item.name) ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700" : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 md:hover:bg-blue-50 dark:md:hover:bg-gray-700 md:hover:border-blue-200 dark:md:hover:border-gray-600"} w-full h-12 md:h-14 px-4 rounded-t-2xl rounded-b-md mb-1 transition-all duration-300 cursor-pointer active:scale-[0.99] relative z-10 ${isFirstInGroup ? 'mt-2' : ''}`}
     >
       <div className="flex flex-row items-center gap-4 transition-all duration-700">
         {/* Profile Circle and Checkbox - Same space */}

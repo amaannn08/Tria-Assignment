@@ -5,16 +5,27 @@ import { useContacts } from '../context/ContactsContext';
 const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavorite, onEdit }) => {
     const { contacts } = useContacts();
     const [currentContact, setCurrentContact] = useState(contact);
+    const [isReady, setIsReady] = useState(false);
+
+    // Debug modal props
+    console.log('ContactDetailsModal render:', { isOpen, contact: contact?.name, currentContact: currentContact?.name, isReady });
 
     // Update currentContact when contacts change or modal opens
     useEffect(() => {
         if (isOpen && contact) {
             const updated = contacts.find(c => c.name === contact.name);
             setCurrentContact(updated || contact);
+            // Add a small delay to prevent immediate backdrop clicks
+            setTimeout(() => setIsReady(true), 100);
+        } else {
+            setIsReady(false);
         }
     }, [isOpen, contact, contacts]);
 
-    if (!isOpen || !currentContact) return null;
+    if (!isOpen || !currentContact || !isReady) {
+        console.log('Modal not rendering - isOpen:', isOpen, 'currentContact:', currentContact?.name, 'isReady:', isReady);
+        return null;
+    }
 
     const handleEdit = () => {
         onEdit(currentContact);
@@ -37,11 +48,20 @@ const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavor
             {/* Backdrop */}
             <div 
                 className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
-                onClick={onClose}
+                onClick={(e) => {
+                    console.log('Backdrop clicked for contact:', currentContact?.name);
+                    onClose();
+                }}
             ></div>
             
             {/* Modal */}
-            <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md animate-fadeIn transition-colors duration-300">
+            <div 
+                className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md animate-fadeIn transition-colors duration-300"
+                onClick={(e) => {
+                    console.log('Modal content clicked for contact:', currentContact?.name);
+                    e.stopPropagation();
+                }}
+            >
                 {/* Action Buttons - Top Left */}
                 <div className="absolute top-4 left-4 flex gap-2 z-10">
                     <button
