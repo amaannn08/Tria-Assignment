@@ -198,7 +198,7 @@ const CreateContact = () => {
                             className={`absolute bottom-2 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg ${
                                 isFavorite 
                                     ? 'bg-yellow-500 hover:bg-yellow-600' 
-                                    : 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600'
+                                    : 'bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-600'
                             }`}
                         >
                             <Star className={`w-7 h-7 transition-all ${isFavorite ? 'text-white fill-white' : 'text-gray-500 dark:text-gray-400'}`} />
@@ -244,7 +244,7 @@ const CreateContact = () => {
                                         name="firstName"
                                         value={formData.firstName}
                                         onChange={handleChange}
-                                        className={`w-full h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 ${errors.firstName ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                        className={`w-full h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.firstName ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                         type="text" 
                                         placeholder="Enter first name"
                                     />
@@ -310,7 +310,7 @@ const CreateContact = () => {
                             <button
                                 type="button"
                                 onClick={handleCancel}
-                                className="flex-1 flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 py-3.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium text-base"
+                                className="flex-1 flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 dark:bg-gray-800 dark:hover:bg-gray-600 text-white px-8 py-3.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium text-base"
                             >
                                 <X className="w-5 h-5" />
                                 <span>Cancel</span>

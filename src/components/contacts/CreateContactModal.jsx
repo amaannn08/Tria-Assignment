@@ -344,7 +344,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                 className={`absolute bottom-2 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg ${
                                     isFavorite 
                                         ? 'bg-yellow-500 hover:bg-yellow-600' 
-                                        : 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600'
+                                        : 'bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-600'
                                 }`}
                             >
                                 <Star className={`w-7 h-7 transition-all ${isFavorite ? 'text-white fill-white' : 'text-gray-500 dark:text-gray-400'}`} />
@@ -449,7 +449,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                                 <input 
                                                     value={email}
                                                     onChange={(e) => handleEmailChange(index, e.target.value)}
-                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-700 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-800 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                                     type="email" 
                                                     placeholder={index === 0 ? "Enter email (optional)" : "Additional email"}
                                                 />
@@ -485,7 +485,7 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                                                 <input 
                                                     value={phone}
                                                     onChange={(e) => handlePhoneChange(index, e.target.value)}
-                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-700 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 [&:-webkit-autofill]:bg-white dark:[&:-webkit-autofill]:bg-gray-800 [&:-webkit-autofill]:text-gray-900 dark:[&:-webkit-autofill]:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                                     type="tel" 
                                                     placeholder={index === 0 ? "Enter 10-digit phone number" : "Additional phone"}
                                                 />
