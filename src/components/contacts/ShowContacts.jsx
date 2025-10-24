@@ -236,13 +236,17 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchMove={handleTouchMove}
-      onMouseEnter={() => setShowCheckbox(true)}
+      onMouseEnter={() => {
+        if (!isMobile) {
+          setShowCheckbox(true);
+        }
+      }}
       onMouseLeave={() => {
-        if (!selected.includes(item.name)) {
+        if (!isMobile && !selected.includes(item.name)) {
           setShowCheckbox(false);
         }
       }}
-      className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] md:items-center ${selected.includes(item.name) ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700" : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-200 dark:hover:border-gray-600"} w-full h-12 md:h-14 px-4 rounded-t-2xl rounded-b-md mb-1 transition-all duration-300 cursor-pointer active:scale-[0.99]`}
+      className={`group flex flex-row items-center md:grid md:grid-cols-[2fr_2fr_1fr_1fr] md:items-center ${selected.includes(item.name) ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700" : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 md:hover:bg-blue-50 dark:md:hover:bg-gray-700 md:hover:border-blue-200 dark:md:hover:border-gray-600"} w-full h-12 md:h-14 px-4 rounded-t-2xl rounded-b-md mb-1 transition-all duration-300 cursor-pointer active:scale-[0.99]`}
     >
       <div className="flex flex-row items-center gap-4 transition-all duration-700">
         {/* Profile Circle and Checkbox - Same space */}
@@ -250,7 +254,7 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
           {/* Profile Icon - Always present, hidden on hover/selected */}
           <div
             className={`w-8 md:w-10 h-8 md:h-10 rounded-full ${item.color} flex items-center justify-center text-white font-bold transition-opacity duration-200 ${
-              selected.includes(item.name) || showCheckbox ? 'opacity-0' : 'opacity-100'
+              selected.includes(item.name) || (!isMobile && showCheckbox) ? 'opacity-0' : 'opacity-100'
             }`}
           >
             {item.name.charAt(0)}
@@ -259,7 +263,7 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
           {/* Checkbox - Hidden by default, visible on hover/selected */}
           <div
             className={`absolute flex items-center justify-center transition-opacity duration-200 z-10 ${
-              selected.includes(item.name) || showCheckbox
+              selected.includes(item.name) || (!isMobile && showCheckbox)
                 ? 'opacity-100' 
                 : 'opacity-0'
             }`}
