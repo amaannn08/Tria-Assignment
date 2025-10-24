@@ -1,12 +1,28 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { contacts as defaultContacts } from "../../contacts"; // your contacts
+import { contacts as defaultContacts, migrateContacts } from "../../contacts"; // your contacts
 
 const ContactsContext = createContext();
+
+// Check if contacts need migration (old format has 'email' and 'phoneNumber' as strings)
+const needsMigration = (contacts) => {
+  if (!contacts || contacts.length === 0) return false;
+  const firstContact = contacts[0];
+  return firstContact.hasOwnProperty('email') && typeof firstContact.email === 'string';
+};
 
 export const ContactsProvider = ({ children }) => {
   const [contacts, setContacts] = useState(() => {
     const stored = localStorage.getItem("contacts");
-    return stored ? JSON.parse(stored) : defaultContacts;
+    if (stored) {
+      const parsedContacts = JSON.parse(stored);
+      // Migrate if needed
+      if (needsMigration(parsedContacts)) {
+        console.log("Migrating contacts to new format...");
+        return migrateContacts(parsedContacts);
+      }
+      return parsedContacts;
+    }
+    return defaultContacts;
   });
 
   useEffect(() => {

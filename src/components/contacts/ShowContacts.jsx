@@ -202,10 +202,44 @@ const ContactRow = ({ item, selected, onContactClick, onSelectHandler, onFavChan
       </div>
 
       <div>
-        <h1 className="text-gray-900 dark:text-gray-100 hidden md:block">{item.email}</h1>
+        <div className="hidden md:block">
+          {(item.emails && item.emails.length > 0) ? (
+            <div className="space-y-1">
+              {item.emails.slice(0, 2).map((email, index) => (
+                <h1 key={index} className="text-gray-900 dark:text-gray-100 text-sm">
+                  {email}
+                </h1>
+              ))}
+              {item.emails.length > 2 && (
+                <h1 className="text-gray-500 dark:text-gray-400 text-xs">
+                  +{item.emails.length - 2} more
+                </h1>
+              )}
+            </div>
+          ) : (
+            <h1 className="text-gray-500 dark:text-gray-400 text-sm">No email</h1>
+          )}
+        </div>
       </div>
       <div>
-        <h1 className="text-gray-900 dark:text-gray-100 hidden md:block pl-3">{item.phoneNumber}</h1>
+        <div className="hidden md:block pl-3">
+          {(item.phoneNumbers && item.phoneNumbers.length > 0) ? (
+            <div className="space-y-1">
+              {item.phoneNumbers.slice(0, 2).map((phone, index) => (
+                <h1 key={index} className="text-gray-900 dark:text-gray-100 text-sm">
+                  {phone}
+                </h1>
+              ))}
+              {item.phoneNumbers.length > 2 && (
+                <h1 className="text-gray-500 dark:text-gray-400 text-xs">
+                  +{item.phoneNumbers.length - 2} more
+                </h1>
+              )}
+            </div>
+          ) : (
+            <h1 className="text-gray-500 dark:text-gray-400 text-sm">No phone</h1>
+          )}
+        </div>
       </div>
 
       {/* Desktop: Show actions on hover */}

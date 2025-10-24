@@ -23,8 +23,20 @@ function Element({searchContacts, onContactClick}){
                     </div>
                     <div className="flex-1 min-w-0">
                         <h1 className="text-gray-900 dark:text-gray-100 text-base font-medium truncate">{item.name}</h1>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm truncate">{item.email}</p>
-                        <p className="text-gray-500 dark:text-gray-500 text-sm truncate">{item.phoneNumber}</p>
+                        <div className="text-gray-600 dark:text-gray-400 text-sm truncate">
+                            {(item.emails && item.emails.length > 0) ? (
+                                item.emails[0]
+                            ) : (
+                                item.email || 'No email'
+                            )}
+                        </div>
+                        <div className="text-gray-500 dark:text-gray-500 text-sm truncate">
+                            {(item.phoneNumbers && item.phoneNumbers.length > 0) ? (
+                                item.phoneNumbers[0]
+                            ) : (
+                                item.phoneNumber || 'No phone'
+                            )}
+                        </div>
                     </div>
                 </div>
             ))}

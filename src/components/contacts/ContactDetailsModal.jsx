@@ -96,35 +96,53 @@ const ContactDetailsModal = ({ isOpen, contact, onClose, onDelete, onToggleFavor
 
                 {/* Contact Information */}
                 <div className="p-6 space-y-4">
-                    {/* Email */}
+                    {/* Emails */}
                     <div className="flex items-start gap-4">
                         <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
                             <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Email</p>
-                            <a 
-                                href={`mailto:${currentContact.email}`}
-                                className="text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-all"
-                            >
-                                {currentContact.email}
-                            </a>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Emails</p>
+                            <div className="space-y-2">
+                                {(currentContact.emails && currentContact.emails.length > 0) ? (
+                                    currentContact.emails.map((email, index) => (
+                                        <a 
+                                            key={index}
+                                            href={`mailto:${email}`}
+                                            className="block text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-all"
+                                        >
+                                            {email}
+                                        </a>
+                                    ))
+                                ) : (
+                                    <span className="text-gray-500 dark:text-gray-400">No email provided</span>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Phone */}
+                    {/* Phone Numbers */}
                     <div className="flex items-start gap-4">
                         <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
                             <Phone className="w-5 h-5 text-green-600 dark:text-green-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Phone</p>
-                            <a 
-                                href={`tel:${currentContact.phoneNumber}`}
-                                className="text-gray-900 dark:text-gray-100 hover:text-green-600 dark:hover:text-green-400 transition-colors"
-                            >
-                                {currentContact.phoneNumber}
-                            </a>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Phone Numbers</p>
+                            <div className="space-y-2">
+                                {(currentContact.phoneNumbers && currentContact.phoneNumbers.length > 0) ? (
+                                    currentContact.phoneNumbers.map((phone, index) => (
+                                        <a 
+                                            key={index}
+                                            href={`tel:${phone}`}
+                                            className="block text-gray-900 dark:text-gray-100 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                                        >
+                                            {phone}
+                                        </a>
+                                    ))
+                                ) : (
+                                    <span className="text-gray-500 dark:text-gray-400">No phone number provided</span>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -4,9 +4,11 @@ import { useContacts } from "../context/ContactsContext";
 import SearchedContacts from './SearchedContacts';
 import ContactDetailsModal from '../contacts/ContactDetailsModal';
 import DeleteConfirmModal from '../ui/DeleteConfirmModal';
+import { useCreateContact } from '../context/CreateContactContext';
 
 const MobileSearchBox = () => {
     const { contacts, setContacts } = useContacts();
+    const { openEditModal } = useCreateContact();
     const [searchContacts, setSearchContacts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [allContacts, setAllContacts] = useState([]);
@@ -40,11 +42,14 @@ const MobileSearchBox = () => {
             setSearchContacts([]);
             return;
         }
-        const filtered = allContacts.filter(contact =>
-            contact.name.toLowerCase().includes(value) ||
-            contact.email.toLowerCase().includes(value) ||
-            contact.phoneNumber.includes(value)
-        );
+        const filtered = allContacts.filter(contact => {
+            const nameMatch = contact.name.toLowerCase().includes(value);
+            const emailMatch = contact.emails?.some(email => email.toLowerCase().includes(value)) || 
+                             (contact.email && contact.email.toLowerCase().includes(value));
+            const phoneMatch = contact.phoneNumbers?.some(phone => phone.includes(value)) || 
+                             (contact.phoneNumber && contact.phoneNumber.includes(value));
+            return nameMatch || emailMatch || phoneMatch;
+        });
         setSearchContacts(filtered);
     };
 
@@ -145,6 +150,7 @@ const MobileSearchBox = () => {
                 onClose={handleDetailsClose}
                 onDelete={handleDetailsDelete}
                 onToggleFavorite={handleToggleFavorite}
+                onEdit={openEditModal}
             />
             <DeleteConfirmModal
                 isOpen={deleteModal.isOpen}

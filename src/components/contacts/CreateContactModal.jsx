@@ -1,6 +1,8 @@
-import { User, Mail, Phone, Check, X, Star } from "lucide-react"
+import { User, Mail, Phone, Check, X, Star, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { useContacts } from "../context/ContactsContext"
+import { findDuplicateContacts } from "../../contacts"
+import MergeContactsModal from "./MergeContactsModal"
 
 const CreateContactModal = ({ isOpen, onClose }) => {
     const { contacts, setContacts } = useContacts();
@@ -8,12 +10,14 @@ const CreateContactModal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
-        email: '',
-        phoneNumber: ''
+        emails: [''],
+        phoneNumbers: ['']
     });
 
     const [isFavorite, setIsFavorite] = useState(false);
     const [errors, setErrors] = useState({});
+    const [duplicateContacts, setDuplicateContacts] = useState([]);
+    const [showMergeModal, setShowMergeModal] = useState(false);
     
     // Generate color once when component mounts
     const [profileColor] = useState(() => {
@@ -32,6 +36,58 @@ const CreateContactModal = ({ isOpen, onClose }) => {
         }
     };
 
+    const handleEmailChange = (index, value) => {
+        const newEmails = [...formData.emails];
+        newEmails[index] = value;
+        setFormData(prev => ({
+            ...prev,
+            emails: newEmails
+        }));
+    };
+
+    const handlePhoneChange = (index, value) => {
+        const newPhoneNumbers = [...formData.phoneNumbers];
+        newPhoneNumbers[index] = value;
+        setFormData(prev => ({
+            ...prev,
+            phoneNumbers: newPhoneNumbers
+        }));
+    };
+
+    const addEmail = () => {
+        setFormData(prev => ({
+            ...prev,
+            emails: [...prev.emails, '']
+        }));
+    };
+
+    const removeEmail = (index) => {
+        if (formData.emails.length > 1) {
+            const newEmails = formData.emails.filter((_, i) => i !== index);
+            setFormData(prev => ({
+                ...prev,
+                emails: newEmails
+            }));
+        }
+    };
+
+    const addPhone = () => {
+        setFormData(prev => ({
+            ...prev,
+            phoneNumbers: [...prev.phoneNumbers, '']
+        }));
+    };
+
+    const removePhone = (index) => {
+        if (formData.phoneNumbers.length > 1) {
+            const newPhoneNumbers = formData.phoneNumbers.filter((_, i) => i !== index);
+            setFormData(prev => ({
+                ...prev,
+                phoneNumbers: newPhoneNumbers
+            }));
+        }
+    };
+
     const validateForm = () => {
         const newErrors = {};
         
@@ -43,16 +99,24 @@ const CreateContactModal = ({ isOpen, onClose }) => {
             newErrors.lastName = 'Last name is required';
         }
         
-        // Email is optional, but validate format if provided
-        if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = 'Invalid email format';
-        }
+        // Validate emails
+        const validEmails = formData.emails.filter(email => email.trim());
+        validEmails.forEach((email, index) => {
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                newErrors[`email_${index}`] = 'Invalid email format';
+            }
+        });
         
-        if (!formData.phoneNumber.trim()) {
-            newErrors.phoneNumber = 'Phone number is required';
-        } else if (!/^\d{10}$/.test(formData.phoneNumber.replace(/\s/g, ''))) {
-            newErrors.phoneNumber = 'Phone number must be 10 digits';
+        // Validate phone numbers
+        const validPhones = formData.phoneNumbers.filter(phone => phone.trim());
+        if (validPhones.length === 0) {
+            newErrors.phoneNumbers = 'At least one phone number is required';
         }
+        validPhones.forEach((phone, index) => {
+            if (!/^\d{10}$/.test(phone.replace(/\s/g, ''))) {
+                newErrors[`phone_${index}`] = 'Phone number must be 10 digits';
+            }
+        });
         
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -67,12 +131,22 @@ const CreateContactModal = ({ isOpen, onClose }) => {
 
         const newContact = {
             name: `${formData.firstName} ${formData.lastName}`,
-            email: formData.email,
-            phoneNumber: formData.phoneNumber,
+            emails: formData.emails.filter(email => email.trim()),
+            phoneNumbers: formData.phoneNumbers.filter(phone => phone.trim()),
             favourite: isFavorite ? "Yes" : "No",
             color: profileColor
         };
 
+        // Check for duplicates
+        const duplicates = findDuplicateContacts(contacts, newContact);
+        
+        if (duplicates.length > 0) {
+            setDuplicateContacts(duplicates);
+            setShowMergeModal(true);
+            return;
+        }
+
+        // No duplicates, add the contact
         setContacts([...contacts, newContact]);
         handleClose();
     };
@@ -82,11 +156,13 @@ const CreateContactModal = ({ isOpen, onClose }) => {
         setFormData({
             firstName: '',
             lastName: '',
-            email: '',
-            phoneNumber: ''
+            emails: [''],
+            phoneNumbers: ['']
         });
         setIsFavorite(false);
         setErrors({});
+        setDuplicateContacts([]);
+        setShowMergeModal(false);
         onClose();
     };
 
@@ -96,7 +172,8 @@ const CreateContactModal = ({ isOpen, onClose }) => {
     const fullName = formData.firstName || formData.lastName ? `${formData.firstName} ${formData.lastName}`.trim() : '-';
     
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <>
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop */}
             <div 
                 className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
@@ -168,15 +245,37 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                         <div className="flex gap-4 mb-6">
                             <Mail className="text-gray-500 dark:text-gray-400 w-6 h-6 mt-3"/>
                             <div className="flex-1">
-                                <input 
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
-                                    type="email" 
-                                    placeholder="Email (Optional)"
-                                />
-                                {errors.email && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.email}</p>}
+                                <div className="space-y-2">
+                                    {formData.emails.map((email, index) => (
+                                        <div key={index} className="flex gap-2">
+                                            <input 
+                                                value={email}
+                                                onChange={(e) => handleEmailChange(index, e.target.value)}
+                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                type="email" 
+                                                placeholder={index === 0 ? "Email (Optional)" : "Additional Email"}
+                                            />
+                                            {formData.emails.length > 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeEmail(index)}
+                                                    className="w-12 h-12 flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={addEmail}
+                                        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                        Add Email
+                                    </button>
+                                </div>
+                                {errors.phoneNumbers && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.phoneNumbers}</p>}
                             </div>
                         </div>
 
@@ -184,15 +283,37 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                         <div className="flex gap-4 mb-8">
                             <Phone className="text-gray-500 dark:text-gray-400 w-6 h-6 mt-3"/>
                             <div className="flex-1">
-                                <input 
-                                    name="phoneNumber"
-                                    value={formData.phoneNumber}
-                                    onChange={handleChange}
-                                    className={`w-full h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.phoneNumber ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
-                                    type="tel" 
-                                    placeholder="Phone Number"
-                                />
-                                {errors.phoneNumber && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.phoneNumber}</p>}
+                                <div className="space-y-2">
+                                    {formData.phoneNumbers.map((phone, index) => (
+                                        <div key={index} className="flex gap-2">
+                                            <input 
+                                                value={phone}
+                                                onChange={(e) => handlePhoneChange(index, e.target.value)}
+                                                className={`flex-1 h-12 rounded-md outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-400 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                type="tel" 
+                                                placeholder={index === 0 ? "Phone Number" : "Additional Phone"}
+                                            />
+                                            {formData.phoneNumbers.length > 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removePhone(index)}
+                                                    className="w-12 h-12 flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={addPhone}
+                                        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                        Add Phone
+                                    </button>
+                                </div>
+                                {errors.phoneNumbers && <p className="text-red-500 dark:text-red-400 text-sm mt-1 ml-1">{errors.phoneNumbers}</p>}
                             </div>
                         </div>
 
@@ -294,32 +415,75 @@ const CreateContactModal = ({ isOpen, onClose }) => {
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Email
+                                        Emails
                                     </label>
-                                    <input 
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        className={`w-full h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 ${errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
-                                        type="email" 
-                                        placeholder="Enter email (optional)"
-                                    />
-                                    {errors.email && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.email}</p>}
+                                    <div className="space-y-2">
+                                        {formData.emails.map((email, index) => (
+                                            <div key={index} className="flex gap-2">
+                                                <input 
+                                                    value={email}
+                                                    onChange={(e) => handleEmailChange(index, e.target.value)}
+                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${errors[`email_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                    type="email" 
+                                                    placeholder={index === 0 ? "Enter email (optional)" : "Additional email"}
+                                                />
+                                                {formData.emails.length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeEmail(index)}
+                                                        className="w-11 h-11 flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            onClick={addEmail}
+                                            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                            Add Email
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Phone Number *
+                                        Phone Numbers *
                                     </label>
-                                    <input 
-                                        name="phoneNumber"
-                                        value={formData.phoneNumber}
-                                        onChange={handleChange}
-                                        className={`w-full h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 ${errors.phoneNumber ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
-                                        type="tel" 
-                                        placeholder="Enter 10-digit phone number"
-                                    />
-                                    {errors.phoneNumber && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.phoneNumber}</p>}
+                                    <div className="space-y-2">
+                                        {formData.phoneNumbers.map((phone, index) => (
+                                            <div key={index} className="flex gap-2">
+                                                <input 
+                                                    value={phone}
+                                                    onChange={(e) => handlePhoneChange(index, e.target.value)}
+                                                    className={`flex-1 h-11 rounded-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 px-4 border-2 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${errors[`phone_${index}`] ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                                    type="tel" 
+                                                    placeholder={index === 0 ? "Enter 10-digit phone number" : "Additional phone"}
+                                                />
+                                                {formData.phoneNumbers.length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removePhone(index)}
+                                                        className="w-11 h-11 flex items-center justify-center text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            onClick={addPhone}
+                                            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                            Add Phone
+                                        </button>
+                                    </div>
+                                    {errors.phoneNumbers && <p className="text-red-500 dark:text-red-400 text-sm mt-1">{errors.phoneNumbers}</p>}
                                 </div>
                             </div>
 
@@ -338,6 +502,25 @@ const CreateContactModal = ({ isOpen, onClose }) => {
                 </div>
             </div>
         </div>
+        
+        {/* Merge Contacts Modal */}
+        <MergeContactsModal
+            isOpen={showMergeModal}
+            onClose={() => setShowMergeModal(false)}
+            duplicateContacts={duplicateContacts}
+            newContact={{
+                name: `${formData.firstName} ${formData.lastName}`,
+                emails: formData.emails.filter(email => email.trim()),
+                phoneNumbers: formData.phoneNumbers.filter(phone => phone.trim()),
+                favourite: isFavorite ? "Yes" : "No",
+                color: profileColor
+            }}
+            onMergeComplete={() => {
+                setShowMergeModal(false);
+                handleClose();
+            }}
+        />
+        </>
     );
 };
 
